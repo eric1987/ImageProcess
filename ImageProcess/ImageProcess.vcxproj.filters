@@ -50,6 +50,9 @@
     <ClCompile Include="DirectTransfer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CamSD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CamSort.h">
@@ -61,6 +64,9 @@
     <QtMoc Include="DirectTransfer.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="CamSD.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CamSort.ui">
@@ -70,6 +76,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="DirectTransfer.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="CamSD.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

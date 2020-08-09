@@ -18,12 +18,25 @@
     <rect>
      <x>40</x>
      <y>40</y>
-     <width>54</width>
-     <height>12</height>
+     <width>71</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>影像SD</string>
+    <string>影像SD-</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="sd">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>50</y>
+     <width>81</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

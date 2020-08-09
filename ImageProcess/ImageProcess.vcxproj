@@ -85,11 +85,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="MainWindow.qrc" />
+    <QtUic Include="CamSD.ui" />
     <QtUic Include="CamSort.ui" />
     <QtUic Include="DirectTransfer.ui" />
     <QtUic Include="LocalSort.ui" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
+    <ClCompile Include="CamSD.cpp" />
     <ClCompile Include="CamSort.cpp" />
     <ClCompile Include="DirectTransfer.cpp" />
     <ClCompile Include="LocalSort.cpp" />
@@ -104,6 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="DirectTransfer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="CamSD.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

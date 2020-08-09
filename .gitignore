@@ -43,3 +43,6 @@ ImageProcess/x64/Debug/vc140.pdb
 x64/Debug/ImageProcess.exe
 x64/Debug/ImageProcess.ilk
 x64/Debug/ImageProcess.pdb
+ImageProcess/x64/Debug/CamSD.obj
+ImageProcess/x64/Debug/moc/moc_CamSD.cpp
+ImageProcess/x64/Debug/moc_CamSD.obj

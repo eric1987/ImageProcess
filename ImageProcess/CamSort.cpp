@@ -12,11 +12,11 @@ CamSort::~CamSort()
 
 void CamSort::connects()
 {
-	connect(ui.selectPosFile, &QPushButton::clicked, this, CamSort::selectPosFiles);
+	connect(ui.selectPosFile, &QPushButton::clicked, this, &CamSort::selectPosFiles);
 
 }
 
 QStringList CamSort::selectPosFiles()
 {
-	
+	return QStringList();
 }
