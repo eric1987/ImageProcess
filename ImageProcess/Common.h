@@ -77,11 +77,11 @@ struct UDisk
 struct SDInfo
 {
 	QString deviceID = "";				//sd¿¨Î¨Ò»IDºÅ
-	QString cam = "";					//cam nickname
-	float capacity = 0;					//capacity
+	QString nickname = "";					//cam nickname
+	float collective = 0;					//capacity
 	float available = 0;				//available				
 	QString path = "";					//path
-	int imageNum = 0;					//image number
+	int imageSize = 0;					//image size
 	bool connected = false;				//true:have connected false:not connected
 	bool sortie = false;				//true: get image exif, and sortied.
 };

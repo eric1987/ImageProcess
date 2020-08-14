@@ -15,7 +15,28 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,5">
    <item>
-    <widget class="QWidget" name="widget" native="true"/>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="camLayout"/>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <widget class="QTabWidget" name="tabWidget">
@@ -108,7 +129,7 @@
          <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,0">
           <item>
            <widget class="QWidget" name="widget_3" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <layout class="QVBoxLayout" name="verticalLayout_4">
              <property name="spacing">
               <number>0</number>
              </property>
@@ -125,7 +146,14 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QTableWidget" name="tableWidget"/>
+              <widget class="QCheckBox" name="checkBox">
+               <property name="text">
+                <string>航拍架次</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="sortWidget" native="true"/>
              </item>
             </layout>
            </widget>
