@@ -27,7 +27,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>logo</string>
          </property>
         </widget>
        </item>
@@ -40,7 +40,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>相机分类</string>
          </property>
         </widget>
        </item>
@@ -53,7 +53,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>本地分类</string>
          </property>
         </widget>
        </item>
@@ -66,7 +66,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>直接传输</string>
          </property>
         </widget>
        </item>
@@ -104,7 +104,7 @@
      <x>0</x>
      <y>0</y>
      <width>960</width>
-     <height>23</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>
