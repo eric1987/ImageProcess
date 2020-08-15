@@ -24,14 +24,8 @@ void CamSort::addCamSD(QString id, QString name, float available, float collecti
 
 void CamSort::test()
 {
-	QMap<int, int> sort;
-	sort.insert(0, 80);
-	sort.insert(1, 140);
-	sort.insert(2, 77);
-	sort.insert(3, 83);
-	sort.insert(4, 92);
-	sort.insert(5, 58);
-	showSorties(sort);
+	refreshSDInfo();
+	getImageExif();
 }
 
 void CamSort::init()
@@ -42,6 +36,8 @@ void CamSort::init()
 	ui.startSave->setCheckable(true);
 	
 	m_sortLayout = new QVBoxLayout;
+	m_sortLayout->setContentsMargins(0, 0, 0, 0);
+	m_sortLayout->setSpacing(5);
 	ui.sortWidget->setLayout(m_sortLayout);
 	
 	test();
@@ -52,7 +48,7 @@ void CamSort::connects()
 	connect(ui.selectPosFile, &QPushButton::clicked, this, &CamSort::selectPosFiles);
 	connect(ui.selectPosType, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CamSort::changePosType);
 	connect(ui.refreshSD, &QPushButton::clicked, this, &CamSort::refreshSDInfo);
-	connect(ui.startSort, &QPushButton::clicked, this, &CamSort::sortImage);
+	connect(ui.startSort, &QPushButton::clicked, this, &CamSort::getSorties);
 
 	connect(ui.startSave, &QToolButton::clicked, this, &CamSort::sortTransfer);
 	connect(ui.selectSavePath, &QPushButton::clicked, this, &CamSort::setSavePath);
@@ -117,6 +113,8 @@ void CamSort::refreshSDInfo()
 			ui.camLayout->addWidget(sd);
 		}
 	}
+
+	getImageExif();
 }
 
 void CamSort::getSDInfo(QString path)
@@ -180,9 +178,44 @@ void CamSort::getSDNicknameAndImageSize(SDInfo &sd, QString path)
 	sd.imageSize = totalSize;
 }
 
-void CamSort::sortImage()
+void CamSort::getSorties()
 {
+	if (m_posFiles.isEmpty())
+	{
+		QMessageBox::information(this, QStringLiteral(""), QStringLiteral("未检测到pos文件或影像路径。"));
+		return;
+	}
 
+	if (m_posSort == nullptr)
+	{
+		m_posSort = new PosSorting;
+	}
+	QThread *thread = new QThread;
+	m_posSort->setPosType(m_posType);
+	m_posSort->setPosFiles(m_posFiles);
+	m_posSort->setDisks(&m_disks);
+	m_posSort->moveToThread(thread);
+
+	qRegisterMetaType<PosInfo>();
+	qRegisterMetaType<ImageInfo>();
+
+	connect(m_posSort, &PosSorting::signalPosData, this, &CamSort::prepareShowSorties, Qt::QueuedConnection);
+	connect(thread, &QThread::started, m_posSort, &PosSorting::getPosSorted);
+	connect(thread, &QThread::finished, m_posSort, &QObject::deleteLater);
+	thread->start();
+}
+
+void CamSort::prepareShowSorties(QMap<int, QList<PosInfo>> posData)
+{
+	m_posData = posData;
+	QMap<int, int> sorties;
+	QMapIterator<int, QList<PosInfo>> iter(posData);
+	while (iter.hasNext())
+	{
+		iter.next();
+		sorties.insert(iter.key(), iter.value().size());
+	}
+	showSorties(sorties);
 }
 
 void CamSort::showSorties(QMap<int, int> sorties)
@@ -272,5 +305,39 @@ void CamSort::enableOperation()
 
 void CamSort::getImageExif()
 {
-
+	Log::INFO(QStringLiteral("获取影像exif信息。"));
+	
+	QMapIterator<QString, SDInfo> iter(m_sdInfo);
+	while (iter.hasNext())
+	{
+		iter.next();
+		UDisk *disk = nullptr;
+		if (m_disks.contains(iter.key()))
+		{
+			disk = m_disks[iter.key()];
+		}
+		else
+		{
+			disk = new UDisk;
+			disk->diskID = iter.key();
+			disk->path = iter.value().path + "DCIM";
+			disk->cam = iter.value().nickname;
+			m_disks.insert(iter.key(), disk);
+		}
+		
+		if (!disk->sortieStatus)
+		{
+			QThread *thread = new QThread;
+			Image *image = new Image;
+			image->setUDiskInfo(disk);
+			image->moveToThread(thread);
+			connect(thread, &QThread::started, image, &Image::readInfo);
+			connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+			thread->start();
+		}
+		else
+		{
+			continue;
+		}
+	}
 }

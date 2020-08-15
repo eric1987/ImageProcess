@@ -46,11 +46,21 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);D:\PT\ImageProcess\exiv2-0.27.2-2017msvc64\include;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)x64\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Logd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)x64\$(Configuration);D:\PT\ImageProcess\exiv2-0.27.2-2017msvc64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Logd.lib;exiv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(Qt_INCLUDEPATH_);$(SolutionDir);D:\PT\ImageProcess\exiv2-0.27.2-2017msvc64\include;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)x64\$(Configuration);D:\PT\ImageProcess\exiv2-0.27.2-2017msvc64\lib;$(Qt_LIBPATH_);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Log.lib;exiv2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
@@ -83,16 +93,17 @@
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DebugInformationFormat>None</DebugInformationFormat>
-      <Optimization>MaxSpeed</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PosSorting.cpp" />
     <QtRcc Include="MainWindow.qrc" />
     <QtUic Include="CamSD.ui" />
     <QtUic Include="CamSort.ui" />
@@ -103,6 +114,7 @@
     <ClCompile Include="CamSD.cpp" />
     <ClCompile Include="CamSort.cpp" />
     <ClCompile Include="DirectTransfer.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="LocalSort.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
@@ -121,6 +133,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <QtMoc Include="PosSorting.h" />
+    <QtMoc Include="Image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

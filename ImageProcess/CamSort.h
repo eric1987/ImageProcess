@@ -9,11 +9,15 @@
 #include <QVBoxLayout>
 #include <QCheckBox>
 #include <QHBoxLayout>
+#include <QThread>
+#include <QMessageBox>
 
 #include "ui_CamSort.h"
 #include "CamSD.h"
 #include "Common.h"
+#include "Image.h"
 #include "Log/Log.h"
+#include "PosSorting.h"
 
 //TODO: 架次显示，架次转存
 //TODO：直接转存，格式化
@@ -33,6 +37,8 @@ public:
 		btn->setBackgroundRole(QPalette::Highlight);
 
 		layout = new QHBoxLayout(this);
+		layout->setSpacing(5);
+		layout->setContentsMargins(0, 0, 0, 0);
 		this->setLayout(layout);
 		layout->addWidget(box);
 		layout->addWidget(btn);
@@ -103,8 +109,11 @@ private:
 	//获取sd卡的昵称与影像数量
 	void getSDNicknameAndImageSize(SDInfo &sd, QString path);
 
-	//架次分类
-	void sortImage();
+	//影像文件架次分类
+	void getSorties();
+
+	//收到pos分架次信息，并准备显示架次概述
+	void prepareShowSorties(QMap<int, QList<PosInfo>> posData);
 
 	//显示架次概述: sorties, key:架次，value：影像数量
 	void showSorties(QMap<int, int> sorties);
@@ -131,6 +140,7 @@ private:
 	//获取影像exif信息
 	void getImageExif();
  
+
 private:
 	Ui::CamSort ui;
 	QVBoxLayout *m_sortLayout = nullptr;
@@ -138,6 +148,7 @@ private:
 	QMap<QString, CamSD*> m_sdList;	//sd卡list，key：id，用来展示sd卡
 	QMap<QString, UDisk*> m_disks;	//sd卡信息，包括影像信息，用于架次分类
 	QMap<QString, SDInfo> m_sdInfo;	//sd信息，包括sd在线状态，存储容量等
+	QMap<int, QList<PosInfo>> m_posData;	//分架次后的pos数据
 
 	int m_posType = DAJ;			//pos类型
 	QString m_savePath;				//存储路径
@@ -146,4 +157,5 @@ private:
 	int m_camNum = 0;				//
 
 	QMap<int, bool> m_sortieSelectStatus;	//架次选择状态
+	PosSorting *m_posSort = nullptr;
 };

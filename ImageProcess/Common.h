@@ -61,11 +61,11 @@ struct UDisk
 	QString diskID;							//u disk serial number
 	bool connected = false;					//true:have connected false:not connected
 	QString cam;							//cam nickname
-	float capacity;							//capacity
-	float available;						//available
+	//float capacity;						//capacity
+	//float available;						//available
 	//float used;							//used
 	QString path;							//path
-	int imageNum;							//image number
+	//int imageNum;							//image number
 	QMap<int, QList<ImageInfo>> imageData;	//sortie images
 	QMap<int, bool> transImage;				//sorties need to transfer. key: sortie number; value: status
 	bool sortieTransStatus = false;			//sortie trans status

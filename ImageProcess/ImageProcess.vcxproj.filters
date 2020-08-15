@@ -53,6 +53,12 @@
     <ClCompile Include="CamSD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PosSorting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CamSort.h">
@@ -65,6 +71,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="CamSD.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Image.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="PosSorting.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
