@@ -245,7 +245,20 @@ void CamSort::showSorties(QMap<int, int> sorties)
 
 void CamSort::showSortieDetail(int sortie)
 {
-
+	if (m_sortieWidgets.contains(sortie))
+	{
+		ui.tabWidget->setCurrentIndex(sortie+1);
+	}
+	else
+	{
+		SortieWidget *widget = new SortieWidget;
+		m_sortieWidgets.insert(sortie, widget);
+		bool ret = widget->showDetail(&m_disks, m_posData[sortie], sortie);
+		QString str = ret ? QStringLiteral("一致") : QStringLiteral("不一致");
+		ui.tabWidget->addTab(widget, QStringLiteral("架次%1-%2").arg(sortie).arg	(str));
+		ui.tabWidget->setCurrentIndex(sortie + 1);
+	}
+	
 }
 
 void CamSort::sortieSelectChanged(int state, int sortie)

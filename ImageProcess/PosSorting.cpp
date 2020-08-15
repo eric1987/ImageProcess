@@ -125,7 +125,7 @@ void PosSorting::sortingPosData()
 			//判断单架次数量大于最小数，才可存入架次数据中
 			if (fightViewData.size() > m_fightImageMinNum)
 			{
-				m_posInfoSorted.insert(++sortie, fightViewData);
+				m_posInfoSorted.insert(sortie++, fightViewData);
 			}
 			fightViewData.clear();
 			initGap();
@@ -139,7 +139,7 @@ void PosSorting::sortingPosData()
 	//将最后的架次数据加入到总数据中
 	if (fightViewData.size() > m_fightImageMinNum)
 	{
-		m_posInfoSorted.insert(++sortie, fightViewData);
+		m_posInfoSorted.insert(sortie++, fightViewData);
 	}
 }
 

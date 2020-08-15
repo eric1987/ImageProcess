@@ -18,8 +18,9 @@
 #include "Image.h"
 #include "Log/Log.h"
 #include "PosSorting.h"
+#include "SortieWidget.h"
 
-//TODO: 架次显示，架次转存
+//TODO: 架次转存
 //TODO：直接转存，格式化
 //TODO: 生成excel文件
 
@@ -158,4 +159,5 @@ private:
 
 	QMap<int, bool> m_sortieSelectStatus;	//架次选择状态
 	PosSorting *m_posSort = nullptr;
+	QMap<int, SortieWidget*> m_sortieWidgets;	//架次结果界面
 };

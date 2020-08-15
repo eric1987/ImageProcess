@@ -59,6 +59,12 @@
     <ClCompile Include="PosSorting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SortieWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TableModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CamSort.h">
@@ -79,6 +85,12 @@
     <QtMoc Include="PosSorting.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="SortieWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TableModel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CamSort.ui">
@@ -91,6 +103,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="CamSD.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="SortieWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
