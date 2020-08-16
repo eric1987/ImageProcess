@@ -227,7 +227,7 @@ void Transfer::directTransfer()
 
 					QString srcFile = fileDir.absolutePath() + "/" + file;
 					QString dstPath = m_dstPath + "/" + info.nickname;
-					if (!directTransferSingleFile(srcFile, dstPath))
+					if (!directTransferSingleFile(fileDir.absolutePath(), file, dstPath))
 					{
 						Log::INFO(QStringLiteral("直接相机传输失败，文件：%1").arg(srcFile));
 						emit signalDirectTransFailed();
@@ -241,12 +241,13 @@ void Transfer::directTransfer()
 	emit signalDirectTransFinished();
 }
 
-bool Transfer::directTransferSingleFile(QString srcFile, QString dstPath)
+bool Transfer::directTransferSingleFile(QString path, QString srcFile, QString dstPath)
 {
-	QString insertStr = getParentFloder(srcFile) + QString("00");
-	QFile imageFile(srcFile);
-	QString finalName = srcFile.insert(2, insertStr);
-	QString dstFile = m_dstPath + "/" + dstPath + "/" + finalName;
+	QString insertStr = getParentFloder(path) + QString("00");
+	QString temp = srcFile;
+	QString finalName = temp.insert(2, insertStr);
+	QFile imageFile(path + "/" + srcFile);
+	QString dstFile = dstPath + "/" + finalName;
 	if (imageFile.exists())
 	{
 		bool ret = imageFile.copy(dstFile);

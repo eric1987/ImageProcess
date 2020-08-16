@@ -119,6 +119,8 @@ void CamSort::refreshSDInfo()
 		}
 	}
 
+	emit signalSDInfo(m_sdInfo);
+
 	getImageExif();
 }
 
@@ -238,11 +240,13 @@ void CamSort::prepareShowSorties(QMap<int, QList<PosInfo>> posData)
 void CamSort::showSorties(QMap<int, int> sorties)
 {
 	//移除所有sortLayout下的widgets
-	QObjectList	children = m_sortLayout->children();
+	QObjectList	children = ui.sortWidget->children();
 	Q_FOREACH (QObject *obj, children)
 	{
 		CustomSortie *sortie = qobject_cast<CustomSortie*>(obj);
 		m_sortLayout->removeWidget(sortie);
+		delete sortie;
+		sortie = nullptr;
 	}
 
 	//添加架次
@@ -252,7 +256,7 @@ void CamSort::showSorties(QMap<int, int> sorties)
 	{
 		iter.next();
 		m_sortieSelectStatus[iter.key()] = false;
-		CustomSortie *sortie = new CustomSortie(iter.key(), iter.value());
+		CustomSortie *sortie = new CustomSortie(iter.key(), iter.value(), ui.sortWidget);
 		connect(sortie, &CustomSortie::signalCheckChanged, this, &CamSort::sortieSelectChanged);
 		connect(sortie, &CustomSortie::signalSortieDetail, this, &CamSort::showSortieDetail);
 
@@ -304,10 +308,6 @@ void CamSort::sortTransfer()
 			return;
 		}
 
-		ui.startSave->setText(QStringLiteral("停止传输"));
-		ui.startSave->setChecked(true);
-		unableOperation();
-
 		if (m_transfer == nullptr)
 		{
 			m_transfer = new Transfer;
@@ -317,6 +317,11 @@ void CamSort::sortTransfer()
 		m_transfer->setDstPath(m_savePath);
 		m_transfer->setTransSortie(m_transferSortie, &m_disks);
 		m_transfer->start();
+
+		ui.startSave->setText(QStringLiteral("停止传输"));
+		ui.startSave->setChecked(true);
+		unableOperation();
+
 	}
 	else       //停止传输
 	{
@@ -403,7 +408,6 @@ void CamSort::getImageExif()
 void CamSort::refreshProcess(int value)
 {
 	ui.progressBar->setValue(value);
-	int x = 0;
 }
 
 void CamSort::transFinished()

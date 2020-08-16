@@ -63,13 +63,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="startTransfer">
-       <property name="text">
-        <string>开始传输</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -82,6 +75,25 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="1" column="2">
+      <widget class="QToolButton" name="startTransfer">
+       <property name="minimumSize">
+        <size>
+         <width>119</width>
+         <height>34</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>119</width>
+         <height>34</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>开始传输</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

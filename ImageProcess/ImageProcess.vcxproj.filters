@@ -68,6 +68,9 @@
     <ClCompile Include="Transfer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExcelOperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CamSort.h">
@@ -95,6 +98,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Transfer.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ExcelOperator.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

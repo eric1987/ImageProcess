@@ -15,8 +15,6 @@ public:
 private:
 	void connects();
 
-
-
 	void slotChangeWidget();
 private:
     Ui::MainWindowClass ui;

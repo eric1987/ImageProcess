@@ -82,9 +82,12 @@ public:
 
 	//添加相机sd信息到界面
 	void addCamSD(QString id, QString name, float available, float collective);
-
+	
+	//刷新sd卡信息
+	void refreshSDInfo();
 signals:
 	void signalStatus(QString str);
+	void signalSDInfo(QMap<QString, SDInfo> sdInfo);
 
 private:
 	void test();
@@ -101,8 +104,7 @@ private:
 	//改变pos类型
 	void changePosType(int index);
 
-	//刷新sd卡信息
-	void refreshSDInfo();
+	
 
 	//获取单个sd信息
 	void getSDInfo(QString path);

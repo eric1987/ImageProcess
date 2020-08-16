@@ -65,7 +65,7 @@ private:
 	void directTransfer();
 
 	//直接传输单个文件方法
-	bool directTransferSingleFile(QString srcFile, QString dstPath);
+	bool directTransferSingleFile(QString path, QString srcFile, QString dstPath);
 
 	//创建存储路径： nickname：sd卡昵称
 	QString creatDirectDir(QString nickname);
