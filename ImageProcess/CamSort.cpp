@@ -40,6 +40,8 @@ void CamSort::init()
 	m_sortLayout->setSpacing(5);
 	ui.sortWidget->setLayout(m_sortLayout);
 	
+	m_transfer = new Transfer;
+
 	test();
 }
 
@@ -53,6 +55,9 @@ void CamSort::connects()
 	connect(ui.startSave, &QToolButton::clicked, this, &CamSort::sortTransfer);
 	connect(ui.selectSavePath, &QPushButton::clicked, this, &CamSort::setSavePath);
 	connect(ui.lineEdit, &QLineEdit::textChanged, this, &CamSort::changeSavePath);
+
+	connect(m_transfer, &Transfer::signalProcess, this, &CamSort::refreshProcess, Qt::QueuedConnection);
+	connect(m_transfer, &Transfer::signalSortieTransFinished, this, &CamSort::transFinished, Qt::QueuedConnection);
 }
 
 void CamSort::selectPosFiles()
@@ -207,6 +212,18 @@ void CamSort::getSorties()
 
 void CamSort::prepareShowSorties(QMap<int, QList<PosInfo>> posData)
 {
+	QMapIterator<QString, UDisk *> it(m_disks);
+	QList<int> sorts = posData.keys();
+	//对传输架次状态做初始化
+	while (it.hasNext())
+	{
+		it.next();
+		Q_FOREACH(int sort, sorts)
+		{
+			it.value()->transImage[sort] = false;
+		}
+	}
+
 	m_posData = posData;
 	QMap<int, int> sorties;
 	QMapIterator<int, QList<PosInfo>> iter(posData);
@@ -258,7 +275,6 @@ void CamSort::showSortieDetail(int sortie)
 		ui.tabWidget->addTab(widget, QStringLiteral("架次%1-%2").arg(sortie).arg	(str));
 		ui.tabWidget->setCurrentIndex(sortie + 1);
 	}
-	
 }
 
 void CamSort::sortieSelectChanged(int state, int sortie)
@@ -270,15 +286,44 @@ void CamSort::sortTransfer()
 {
 	if (ui.startSave->isChecked())	//传输
 	{
+		m_transferSortie.clear();
+
+		QMapIterator<int, bool> iter(m_sortieSelectStatus);
+		while (iter.hasNext())
+		{
+			iter.next();
+			if (iter.value())
+			{
+				m_transferSortie.append(iter.key());
+			}
+		}
+
+		if ("" == m_savePath || m_transferSortie.isEmpty())
+		{
+			QMessageBox::information(this, QStringLiteral("警告"), QStringLiteral("请选择存储路径与要传输的架次。"));
+			return;
+		}
+
 		ui.startSave->setText(QStringLiteral("停止传输"));
 		ui.startSave->setChecked(true);
 		unableOperation();
+
+		if (m_transfer == nullptr)
+		{
+			m_transfer = new Transfer;
+		}
+		
+		m_transfer->setTransType(SORTIE);
+		m_transfer->setDstPath(m_savePath);
+		m_transfer->setTransSortie(m_transferSortie, &m_disks);
+		m_transfer->start();
 	}
 	else       //停止传输
 	{
 		ui.startSave->setText(QStringLiteral("开始传输"));
 		ui.startSave->setChecked(false);
 		enableOperation();
+		m_transfer->stopTransfer();
 	}
 }
 
@@ -353,4 +398,18 @@ void CamSort::getImageExif()
 			continue;
 		}
 	}
+}
+
+void CamSort::refreshProcess(int value)
+{
+	ui.progressBar->setValue(value);
+	int x = 0;
+}
+
+void CamSort::transFinished()
+{
+	ui.progressBar->setValue(100);
+	QMessageBox::information(this, QStringLiteral(""), QStringLiteral("架次文件传输完成。"));
+	Log::INFO(QStringLiteral("架次文件传输文件。"));
+	sortTransfer();
 }

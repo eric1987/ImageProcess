@@ -19,8 +19,8 @@
 #include "Log/Log.h"
 #include "PosSorting.h"
 #include "SortieWidget.h"
+#include "Transfer.h"
 
-//TODO: 架次转存
 //TODO：直接转存，格式化
 //TODO: 生成excel文件
 
@@ -141,6 +141,11 @@ private:
 	//获取影像exif信息
 	void getImageExif();
  
+	//刷新架次传输进度
+	void refreshProcess(int value);
+
+	//架次传输完成
+	void transFinished();
 
 private:
 	Ui::CamSort ui;
@@ -160,4 +165,6 @@ private:
 	QMap<int, bool> m_sortieSelectStatus;	//架次选择状态
 	PosSorting *m_posSort = nullptr;
 	QMap<int, SortieWidget*> m_sortieWidgets;	//架次结果界面
+
+	Transfer *m_transfer = nullptr;
 };

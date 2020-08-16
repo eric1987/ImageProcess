@@ -11,6 +11,9 @@ public:
 	DirectTransfer(QWidget *parent = Q_NULLPTR);
 	~DirectTransfer();
 
+
+
+
 private:
 	Ui::DirectTransfer ui;
 };

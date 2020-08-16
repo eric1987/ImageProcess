@@ -77,13 +77,14 @@ struct UDisk
 struct SDInfo
 {
 	QString deviceID = "";				//sd卡唯一ID号
-	QString nickname = "";					//cam nickname
-	float collective = 0;					//capacity
+	QString nickname = "";				//cam nickname
+	float collective = 0;				//capacity
 	float available = 0;				//available				
 	QString path = "";					//path
 	int imageSize = 0;					//image size
 	bool connected = false;				//true:have connected false:not connected
 	bool sortie = false;				//true: get image exif, and sortied.
+	QMap<QString, bool> directTransStatus;	//直接传输状态，QString：DCIM下子路径
 };
 
 struct SortieStatus

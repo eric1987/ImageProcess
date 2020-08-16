@@ -106,6 +106,7 @@
     <ClCompile Include="PosSorting.cpp" />
     <ClCompile Include="SortieWidget.cpp" />
     <ClCompile Include="TableModel.cpp" />
+    <ClCompile Include="Transfer.cpp" />
     <QtRcc Include="MainWindow.qrc" />
     <QtUic Include="CamSD.ui" />
     <QtUic Include="CamSort.ui" />
@@ -136,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <QtMoc Include="Transfer.h" />
     <QtMoc Include="TableModel.h" />
     <QtMoc Include="SortieWidget.h" />
     <QtMoc Include="PosSorting.h" />
