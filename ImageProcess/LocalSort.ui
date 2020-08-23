@@ -1,23 +1,175 @@
-<UI version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>LocalSort</class>
- <widget class="QWidget" name="LocalSort" >
-  <property name="objectName" >
-   <string notr="true">LocalSort</string>
-  </property>
-  <property name="geometry" >
+ <widget class="QWidget" name="LocalSort">
+  <property name="geometry">
    <rect>
-	<x>0</x>
-	<y>0</y>
-	<width>400</width>
-	<height>300</height>
+    <x>0</x>
+    <y>0</y>
+    <width>813</width>
+    <height>485</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>LocalSort</string>
   </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="5">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>pos与影像</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
+       <property name="spacing">
+        <number>7</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="pos" native="true">
+          <attribute name="title">
+           <string>POS</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0">
+           <item>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>选择要分架次的pos文件</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QPushButton" name="selectPosFile">
+               <property name="text">
+                <string>打开</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>选择pos文件的类型</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QComboBox" name="selectPosType"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QListWidget" name="posWidget"/>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QPushButton" name="startSort">
+               <property name="text">
+                <string>开始架次分类</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="cam1" native="true">
+          <attribute name="title">
+           <string>CAM1</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="ImageSelect" name="widget" native="true"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="cam2" native="true">
+          <attribute name="title">
+           <string>CAM2</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="ImageSelect" name="widget_2" native="true"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="cam3" native="true">
+          <attribute name="title">
+           <string>CAM3</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="ImageSelect" name="widget_3" native="true"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="cam4" native="true">
+          <attribute name="title">
+           <string>CAM4</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="ImageSelect" name="widget_4" native="true"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="cam5" native="true">
+          <attribute name="title">
+           <string>CAM5</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="ImageSelect" name="widget_5" native="true"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="cam6" native="true">
+          <attribute name="title">
+           <string>CAM6</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="ImageSelect" name="widget_6" native="true"/>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ImageSelect</class>
+   <extends>QWidget</extends>
+   <header>imageselect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
-</UI>
+</ui>

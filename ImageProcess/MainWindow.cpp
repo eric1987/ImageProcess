@@ -16,6 +16,7 @@ void MainWindow::connects()
 	connect(ui.transFormat, &QToolButton::clicked, this, &MainWindow::slotChangeWidget);
 
 	connect(ui.page_1, &CamSort::signalSDInfo, ui.page_3, &DirectTransfer::setSDInfo);
+	connect(ui.page_1, &CamSort::signalStatus, this, &MainWindow::slotShowStatus);
 }
 
 void MainWindow::slotChangeWidget()
@@ -34,4 +35,9 @@ void MainWindow::slotChangeWidget()
 		ui.page_1->refreshSDInfo();
 		ui.stackedWidget->setCurrentIndex(2);
 	}
+}
+
+void MainWindow::slotShowStatus(QString mes)
+{
+	ui.statusBar->showMessage(mes);
 }

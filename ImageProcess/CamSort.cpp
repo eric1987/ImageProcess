@@ -14,14 +14,6 @@ CamSort::~CamSort()
 {
 }
 
-void CamSort::addCamSD(QString id, QString name, float available, float collective)
-{
-	if (true)
-	{
-
-	}
-}
-
 void CamSort::test()
 {
 	refreshSDInfo();
@@ -106,7 +98,11 @@ void CamSort::refreshSDInfo()
 		if (m_sdList.contains(iter.key()))
 		{
 			//已存在
-			m_sdList[iter.key()]->setOnlineStatus(iter->connected);
+			CamSD *sd = m_sdList[iter.key()];
+			sd->setName(iter->nickname, iter->path);
+			sd->setAvailableAndCollective(iter->available, iter->collective);
+			sd->setOnlineStatus(iter->connected);
+			//m_sdList[iter.key()]->setOnlineStatus(iter->connected);
 		}
 		else
 		{
@@ -161,7 +157,7 @@ void CamSort::getSDNicknameAndImageSize(SDInfo &sd, QString path)
 	{
 		for each (QString var in imageDirList)
 		{
-			QDir imageDir = QDir(dcimDir.absolutePath() + "/" + imageDirList.first());
+			QDir imageDir = QDir(dcimDir.absolutePath() + "/" + var);
 			QStringList filters;
 			filters << "*.jpg" << "*.png" << "*.arw" << "*.cr2";
 			imageDir.setNameFilters(filters);
@@ -197,6 +193,8 @@ void CamSort::getSorties()
 	{
 		m_posSort = new PosSorting;
 	}
+
+	emit signalStatus(QStringLiteral("正在进行架次分类。"));
 	QThread *thread = new QThread;
 	m_posSort->setPosType(m_posType);
 	m_posSort->setPosFiles(m_posFiles);
@@ -214,6 +212,7 @@ void CamSort::getSorties()
 
 void CamSort::prepareShowSorties(QMap<int, QList<PosInfo>> posData)
 {
+	emit signalStatus(QStringLiteral("架次分类已完成。"));
 	QMapIterator<QString, UDisk *> it(m_disks);
 	QList<int> sorts = posData.keys();
 	//对传输架次状态做初始化
@@ -288,6 +287,8 @@ void CamSort::sortieSelectChanged(int state, int sortie)
 
 void CamSort::sortTransfer()
 {
+	ui.progressBar->setValue(0);
+
 	if (ui.startSave->isChecked())	//传输
 	{
 		m_transferSortie.clear();
@@ -415,5 +416,7 @@ void CamSort::transFinished()
 	ui.progressBar->setValue(100);
 	QMessageBox::information(this, QStringLiteral(""), QStringLiteral("架次文件传输完成。"));
 	Log::INFO(QStringLiteral("架次文件传输文件。"));
-	sortTransfer();
+	ui.startSave->setText(QStringLiteral("开始传输"));
+	ui.startSave->setChecked(false);
+	enableOperation();
 }

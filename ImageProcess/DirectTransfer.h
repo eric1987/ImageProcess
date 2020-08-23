@@ -23,11 +23,11 @@ public:
 		QString boxName;
 		if (info.connected)
 		{
-			boxName = QStringLiteral("影像-%1(%2)").arg(m_info.nickname).arg(m_info.path);
+			boxName = QStringLiteral("影像-%1(%2) 影像数量%3").arg(m_info.nickname).arg(m_info.path).arg(m_info.imageSize);
 		}
 		else
 		{
-			boxName = QStringLiteral("影像-%1(离线)").arg(m_info.nickname);
+			boxName = QStringLiteral("影像-%1(离线) 影像数量%2").arg(m_info.nickname).arg(m_info.imageSize);
 		}
 		
 		box = new QCheckBox(boxName);
@@ -80,6 +80,7 @@ public:
 
 signals:
 	void signalFormatFinish();
+	void signalRefreshSDInfo();
 
 private:
 	//初始化

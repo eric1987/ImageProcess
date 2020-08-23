@@ -1,3 +1,4 @@
+//TODO：完成本地路径下影像exif信息获取
 #pragma once
 
 #include "Common.h"
@@ -27,6 +28,9 @@ public:
 	
 	//读取路径下的图片信息
 	void readInfo();
+
+	//读取本地路径下的图片信息
+	void readLocalInfo();
 
 signals:
 	void signalInfos(QMap<int, QList<ImageInfo>> m_sortedImage);

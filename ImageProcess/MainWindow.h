@@ -16,6 +16,7 @@ private:
 	void connects();
 
 	void slotChangeWidget();
+	void slotShowStatus(QString str);
 private:
     Ui::MainWindowClass ui;
 	

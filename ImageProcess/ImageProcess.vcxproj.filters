@@ -71,6 +71,9 @@
     <ClCompile Include="ExcelOperator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ImageSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CamSort.h">
@@ -103,6 +106,9 @@
     <QtMoc Include="ExcelOperator.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="ImageSelect.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CamSort.ui">
@@ -118,6 +124,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="SortieWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ImageSelect.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

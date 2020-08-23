@@ -88,6 +88,7 @@ void DirectTransfer::formatSelectSD()
 	}
 
 	QMessageBox::information(this, QStringLiteral("通知"), QStringLiteral("格式化已完成。"));
+	emit signalRefreshSDInfo();
 }
 
 void DirectTransfer::formatSingleSD(QString path)
@@ -106,6 +107,7 @@ void DirectTransfer::formatSingleSD(QString path)
 	formatSD(path);
 
 	QMessageBox::information(this, QStringLiteral("通知"), QStringLiteral("格式化已完成。"));
+	emit signalRefreshSDInfo();
 }
 
 void DirectTransfer::formatSD(QString path)

@@ -119,7 +119,7 @@ void ExcelOperator::writePosAndImage(QString file, QList<ImageInfo> &imageData, 
 	int column = 4;	//由ImageInfo的数据种类决定
 	int row = posData.size();
 
-	QList<QVariant> head;
+	/*QList<QVariant> head;
 	head << QStringLiteral("时间") << QStringLiteral("光圈") << QStringLiteral("快门速度")
 		<< QStringLiteral("ISO");
 
@@ -145,7 +145,7 @@ void ExcelOperator::writePosAndImage(QString file, QList<ImageInfo> &imageData, 
 	}
 	QVariant res = QVariant(vars);
 
-
+*/
 }
 
 void ExcelOperator::WriteExcel(QString file, int row, int column, QVariant &var)

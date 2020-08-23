@@ -79,9 +79,6 @@ class CamSort : public QWidget
 public:
 	CamSort(QWidget *parent = Q_NULLPTR);
 	~CamSort();
-
-	//添加相机sd信息到界面
-	void addCamSD(QString id, QString name, float available, float collective);
 	
 	//刷新sd卡信息
 	void refreshSDInfo();
@@ -103,8 +100,6 @@ private:
 
 	//改变pos类型
 	void changePosType(int index);
-
-	
 
 	//获取单个sd信息
 	void getSDInfo(QString path);

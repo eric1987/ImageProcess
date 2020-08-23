@@ -33,10 +33,22 @@ void Image::setUDiskInfo(UDisk *udisk)
 	m_disk = udisk;
 }
 
+bool lessThan(const QString &s1, const QString &s2)
+{
+	if (s1.size() < 3 && s2.size() < 3)
+	{
+		Log::INFO(QStringLiteral("非法的文件夹路径或文件：%1， %2 ").arg(s1).arg(s2));
+	}
+	return s1 < s2;
+}
+
 void Image::readInfo()
 {
 	QDir dir(m_disk->path);
 	QStringList dirList = dir.entryList(QDir::NoDotAndDotDot | QDir::Dirs);
+
+	qSort(dirList.begin(), dirList.end(), lessThan);
+
 	for each (QString subDir in dirList)
 	{
 		if (subDir.contains("MSDCF"))
@@ -51,6 +63,7 @@ void Image::readInfo()
 				continue;
 			}
 
+			qSort(fileList.begin(), fileList.end(), lessThan);
 			for each (QString var in fileList)
 			{
 				ImageInfo info;
@@ -81,6 +94,11 @@ void Image::readInfo()
 	m_sortie = 0;
 
 	m_disk->sortieStatus = true;
+}
+
+void Image::readLocalInfo()
+{
+
 }
 
 void Image::nameContinuous(QString &name)
