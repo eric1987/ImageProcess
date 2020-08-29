@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <ClInclude Include="resource.h" />
     <QtMoc Include="Util.h" />
     <QtMoc Include="ImageSelect.h" />
     <QtMoc Include="ExcelOperator.h" />
@@ -149,6 +150,12 @@
     <QtMoc Include="SortieWidget.h" />
     <QtMoc Include="PosSorting.h" />
     <QtMoc Include="Image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ImageProcess.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
