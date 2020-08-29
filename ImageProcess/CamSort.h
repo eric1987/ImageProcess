@@ -21,7 +21,6 @@
 #include "SortieWidget.h"
 #include "Transfer.h"
 
-//TODO：直接转存，格式化
 //TODO: 生成excel文件
 
 class CustomSortie : public QWidget
@@ -87,8 +86,6 @@ signals:
 	void signalSDInfo(QMap<QString, SDInfo> sdInfo);
 
 private:
-	void test();
-
 	//初始化
 	void init();
 

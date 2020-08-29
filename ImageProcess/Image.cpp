@@ -73,9 +73,8 @@ void Image::readInfo()
 					Log::INFO(QStringLiteral("读取图片信息错误."));
 					return;
 				}
-
+				m_exifImages.append(info);
 				sortie(info);
-				m_info = info;
 			}
 
 			m_disk->exifStatus[subPath] = true;
@@ -89,16 +88,21 @@ void Image::readInfo()
 			var.type = 0;
 		}
 	}
-	m_disk->imageData.insert(m_sortie++, m_fightData);
+	else
+	{
+		m_disk->imageData.insert(m_sortie++, m_fightData);
+	}
+	m_fightData.clear();
 	m_sortieImageSize = 0;
 	m_sortie = 0;
 
 	m_disk->sortieStatus = true;
 }
 
-void Image::readLocalInfo()
+void Image::readAndSortLocalImage()
 {
-
+	getImageInfo();
+	sortieLocal();
 }
 
 void Image::nameContinuous(QString &name)
@@ -121,7 +125,55 @@ void Image::nameContinuous(QString &name)
 void Image::sortie(ImageInfo info)
 {
 	//更换架次
-	if (fabs(info.timestamp - m_info.timestamp) > m_averageGap * m_sortieTime)
+	if (fabs(info.timestamp - m_info.timestamp) > m_averageGap * m_sortieTime || 
+		fabs(info.size - m_info.size) > m_sizeDiff)
+	{
+		//判断架次中的image数量，少于50，为非正常拍摄。
+		if (m_sortieImageSize < m_fightImageMinNum)
+		{
+			/*for (int i = 0; i < m_fightData.size(); i++)
+			{
+				m_fightData[i].type = 0;
+			}*/
+			m_fightData.clear();
+		}
+		else
+		{
+			m_disk->imageData.insert(m_sortie++, m_fightData);
+			m_fightData.clear();
+			m_sortieImageSize = 0;
+		}
+	}
+
+	info.type = 1;
+	m_sortieImageSize++;
+	m_fightData.append(info);
+	m_info = info;
+}
+
+void Image::getImageInfo()
+{
+	Q_FOREACH(QString file, m_images)
+	{
+		ImageInfo info;
+		int ret = readSingleInfo(file.toStdString(), info);
+		if (ret < 0)
+		{
+			Log::INFO(QStringLiteral("读取图片信息错误."));
+			return;
+		}
+		m_infos.append(info);
+		m_info = info;
+	}
+}
+
+void Image::sortieLocal()
+{
+
+
+	//更换架次
+	#if 0
+if (fabs(info.timestamp - m_info.timestamp) > m_averageGap * m_sortieTime)
 	{
 		//判断架次中的image数量，少于50，为非正常拍摄。
 		if (m_sortieImageSize < m_fightImageMinNum)
@@ -143,6 +195,7 @@ void Image::sortie(ImageInfo info)
 	m_sortieImageSize++;
 	m_fightData.append(info);
 	m_info = info;
+#endif
 }
 
 int Image::readSingleInfo(std::string file, ImageInfo &info)
@@ -154,10 +207,10 @@ int Image::readSingleInfo(std::string file, ImageInfo &info)
 	}
 
 	//获取文件大小
-	//FILE *FP = fopen(file.c_str(), "rb");
-	//fseek(FP, 0, SEEK_END);			//定位到文件末 
-	//int FileSize = ftell(FP);       //文件长度
-	//fclose(FP);
+	FILE *FP = fopen(file.c_str(), "rb");
+	fseek(FP, 0, SEEK_END);			//定位到文件末 
+	int fileSize = ftell(FP);       //文件长度
+	fclose(FP);
 
 	try
 	{
@@ -191,6 +244,7 @@ int Image::readSingleInfo(std::string file, ImageInfo &info)
 		info.stime = QString::fromStdString(FindExifKey(ed, "Exif.Image.DateTime"));
 		QDateTime dateTime = QDateTime::fromString(info.stime, "yyyy:MM:dd HH:mm:ss");
 		info.timestamp = dateTime.toSecsSinceEpoch();
+		info.size = fileSize;
 
 		return 0;
 	}
@@ -199,9 +253,6 @@ int Image::readSingleInfo(std::string file, ImageInfo &info)
 		//cout << "An exception occurred. Exception Nr. " << e << '\n';
 		return -1;
 	}
-	
-	
-
 	
 	//std::cout << "照片尺寸	:" << FindExifKey(ed, "Exif.Photo.PixelYDimension") << " x " << FindExifKey(ed, "Exif.Photo.PixelXDimension") << std::endl;
 

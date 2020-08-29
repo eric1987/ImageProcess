@@ -34,7 +34,7 @@ struct ImageInfo
 	QString aperture;
 	QString shutterspeed;
 	QString iso;
-	QString size;
+	int size;
 	QString imageName;			///<用于影像存储时的名称
 	QString fileName;			///<用于影像转存使用：影像绝对路径
 	int type = -1;				///<数据类型，-1：初始值，0：舍弃，1：留用

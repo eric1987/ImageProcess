@@ -44,7 +44,7 @@
          <property name="currentIndex">
           <number>0</number>
          </property>
-         <widget class="QWidget" name="pos" native="true">
+         <widget class="QWidget" name="pos">
           <attribute name="title">
            <string>POS</string>
           </attribute>
@@ -93,7 +93,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="cam1" native="true">
+         <widget class="QWidget" name="cam1">
           <attribute name="title">
            <string>CAM1</string>
           </attribute>
@@ -103,7 +103,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="cam2" native="true">
+         <widget class="QWidget" name="cam2">
           <attribute name="title">
            <string>CAM2</string>
           </attribute>
@@ -113,7 +113,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="cam3" native="true">
+         <widget class="QWidget" name="cam3">
           <attribute name="title">
            <string>CAM3</string>
           </attribute>
@@ -123,7 +123,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="cam4" native="true">
+         <widget class="QWidget" name="cam4">
           <attribute name="title">
            <string>CAM4</string>
           </attribute>
@@ -133,7 +133,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="cam5" native="true">
+         <widget class="QWidget" name="cam5">
           <attribute name="title">
            <string>CAM5</string>
           </attribute>
@@ -143,7 +143,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="cam6" native="true">
+         <widget class="QWidget" name="cam6">
           <attribute name="title">
            <string>CAM6</string>
           </attribute>

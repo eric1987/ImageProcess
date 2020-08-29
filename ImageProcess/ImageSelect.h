@@ -2,6 +2,9 @@
 #pragma once
 
 #include <QWidget>
+#include <QFileDialog>
+#include <QStandardPaths>
+
 #include "ui_ImageSelect.h"
 
 class ImageSelect : public QWidget
@@ -18,7 +21,10 @@ private:
 	void slotAddImages();
 	void slotAddFolders();
 	void slotClearImages();
+	QStringList getDirImages(QString path);	//获取路径下的影像
+	void sortImages();
 
 private:
 	Ui::ImageSelect ui;
+	QStringList m_images;
 };

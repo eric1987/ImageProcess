@@ -1,207 +1,238 @@
-#include "ExcelOperator.h"
+#include "exceloperator.h"
+#include <objbase.h>
 
-#include <QAxObject>
-#include <QDebug>
-#include <QFileInfo>
-#include <QDir>
-
-ExcelOperator::ExcelOperator(QObject *parent)
-	: QObject(parent)
+ExcelOperator::ExcelOperator(QObject *parent) : QObject(parent)
+, m_pExcel(NULL)
+, m_pWorksheets(NULL)
+, m_pWorkbook(NULL)
 {
+
 }
 
 ExcelOperator::~ExcelOperator()
 {
+	close();
 }
 
-void ExcelOperator::ReadExcel(QString file)
+bool ExcelOperator::open(QString path)
 {
-	auto excel = new QAxObject("Excel.Application");
-	excel->dynamicCall("SetVisible(bool Visible)", "false");
-	excel->setProperty("DisplayAlerts", false);
-	//excel->dynamicCall("Quit(void)");
-
-	//获取工作薄(excel文件)集合
-	auto workbooks = excel->querySubObject("Workbooks");
-
-	workbooks->dynamicCall("Add");
-
-	auto workbook = workbooks->querySubObject("Open(const QString&)", file);
-	auto sheets = workbook->querySubObject("Worksheets");
-	auto sheet = sheets->querySubObject("Item(int)", 1);
-
-	// read the first cells in row 1..5
-	for (int r = 1; (r <= 5); ++r)
-	{
-		auto cCell = sheet->querySubObject("Cells(int,int)", r, 1);
-		qDebug() << cCell->dynamicCall("Value()").toInt();
+	m_strPath = path;
+	QAxObject *pWorkbooks = NULL;
+	CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	m_pExcel = new(std::nothrow) QAxObject();
+	if (NULL == m_pExcel) {
+		qCritical() << "创建Excel对象失败...";
+		return false;
 	}
+	try {
+		m_pExcel->setControl("Excel.Application");
+		m_pExcel->dynamicCall("SetVisible(bool)", false); //true 表示操作文件时可见，false表示为不可见
+		m_pExcel->setProperty("DisplayAlerts", false);
+		pWorkbooks = m_pExcel->querySubObject("WorkBooks");
+		pWorkbooks->dynamicCall("Add");
+		m_pWorkbook = m_pExcel->querySubObject("ActiveWorkBook");
+		qDebug() << "excel path: " << m_strPath;
+
+		// 获取打开的excel文件中所有的工作sheet
+		m_pWorksheets = m_pWorkbook->querySubObject("WorkSheets");
+	}
+	catch (...) {
+		qCritical() << "打开文件失败...";
+		return false;
+	}
+
+	return true;
 }
 
-void ExcelOperator::WritePhotoInfo(QString file, QList<ImageInfo> &datas)
+bool ExcelOperator::close()
 {
-	int column = 4;	//由ImageInfo的数据种类决定
-	int row = datas.size();
-
-	QList<QVariant> head;
-	head << QStringLiteral("时间") << QStringLiteral("光圈") << QStringLiteral("快门速度")
-		<< QStringLiteral("ISO");
-
-
-	QVariantList vars;
-	QList<QList<QVariant>> v;
-	v.append(head);
-
-	for (int i = 0; i < row; i++)
+	qDebug() << "excel close...";
+	if (m_pExcel)
 	{
-		QList<QVariant> rowData;
-		rowData.append(datas[i].time);
-		rowData.append(datas[i].aperture);
-		rowData.append(datas[i].shutterspeed);
-		rowData.append(datas[i].iso);
-
-		v.append(rowData);
+		qDebug() << "closing...";
+		m_pWorkbook->dynamicCall("SaveAs(const QString&)", QDir::toNativeSeparators(m_strPath));
+		m_pWorkbook->dynamicCall("Close()");
+		m_pExcel->dynamicCall("Quit()");
+		delete m_pExcel;
+		m_pExcel = NULL;
 	}
-
-	for (int i = 0;i < row + 1; ++i)
-	{
-		vars.append(QVariant(v[i]));
-	}
-	QVariant res = QVariant(vars);
-
-	WriteExcel(file, row + 1, column, res);
+	return true;
 }
 
-void ExcelOperator::WritePosInfo(QString file, QList<PosInfo> &datas)
+int ExcelOperator::getSheetsCount()
 {
-	int column = 10;		//由PosInfo的数据种类决定
-	int row = datas.size();
-	
-	QList<QVariant> head;
-	head << QStringLiteral("序号") << QStringLiteral("时间") << QStringLiteral("纬度")
-		<< QStringLiteral("经度") << QStringLiteral("高度") << QStringLiteral("俯仰")
-		<< QStringLiteral("滚转") << QStringLiteral("航偏角") << QStringLiteral("航向")
-		<< QStringLiteral("地速");
-
-	QVariantList vars;
-	QList<QList<QVariant>> v;
-	v.append(head);
-	
-	for (int i = 0; i < row; i++)
-	{
-		QList<QVariant> rowData;
-		rowData.append(QString::number(datas[i].index));
-		//rowData.append(datas[i].time);
-		rowData.append(QString::number(datas[i].timestamp));
-		rowData.append(QString::number(datas[i].latitude));
-		rowData.append(QString::number(datas[i].longitude));
-		rowData.append(QString::number(datas[i].altitude));
-		rowData.append(QString::number(datas[i].pitching));
-		rowData.append(QString::number(datas[i].rolling));
-		rowData.append(QString::number(datas[i].driftAngle));
-		rowData.append(QString::number(datas[i].heading));
-		rowData.append(QString::number(datas[i].groundSpeed));
-		
-		v.append(rowData);
-	}
-
-	for (int i = 0;i < row+1; ++i)
-	{
-		vars.append(QVariant(v[i]));
-	}
-	QVariant res = QVariant(vars);
-
-	WriteExcel(file, row+1, column, res);
+	int count = 0;
+	count = m_pWorksheets->property("Count").toInt();
+	return count;
 }
 
-void ExcelOperator::writePosAndImage(QString file, QList<ImageInfo> &imageData, QList<PosInfo> &posData)
+
+QAxObject* ExcelOperator::addSheet(QString name)
 {
-	int column = 4;	//由ImageInfo的数据种类决定
-	int row = posData.size();
-
-	/*QList<QVariant> head;
-	head << QStringLiteral("时间") << QStringLiteral("光圈") << QStringLiteral("快门速度")
-		<< QStringLiteral("ISO");
-
-
-	QVariantList vars;
-	QList<QList<QVariant>> v;
-	v.append(head);
-
-	for (int i = 0; i < row; i++)
-	{
-		QList<QVariant> rowData;
-		rowData.append(datas[i].time);
-		rowData.append(datas[i].aperture);
-		rowData.append(datas[i].shutterspeed);
-		rowData.append(datas[i].iso);
-
-		v.append(rowData);
+	QAxObject *pWorkSheet = NULL;
+	try {
+		int count = m_pWorksheets->property("Count").toInt();  //获取工作表数目
+		QAxObject *pLastSheet = m_pWorksheets->querySubObject("Item(int)", count);
+		pWorkSheet = m_pWorksheets->querySubObject("Add(QVariant)", pLastSheet->asVariant());
+		pLastSheet->dynamicCall("Move(QVariant)", pWorkSheet->asVariant());
+		pWorkSheet->setProperty("Name", name);  //设置工作表名称
 	}
-
-	for (int i = 0;i < row + 1; ++i)
-	{
-		vars.append(QVariant(v[i]));
+	catch (...) {
+		qCritical() << "创建sheet失败...";
 	}
-	QVariant res = QVariant(vars);
-
-*/
+	return pWorkSheet;
 }
 
-void ExcelOperator::WriteExcel(QString file, int row, int column, QVariant &var)
+bool ExcelOperator::delSheet(QString name)
 {
-	auto excel = new QAxObject(this);
-	excel->setControl("Excel.Application");
-	excel->dynamicCall("SetVisible(boo Visible)", "false");
-	excel->setProperty("DisplayAlerts", false);
-
-	auto workbooks = excel->querySubObject("WorkBooks");
-	if (nullptr == workbooks)
-	{
-		int x = 0;
+	try {
+		QAxObject *pFirstSheet = m_pWorksheets->querySubObject("Item(QString)", name);
+		pFirstSheet->dynamicCall("delete");
 	}
-	workbooks->dynamicCall("Add");
-	auto workbook = excel->querySubObject("ActiveWorkBook");
-
-	auto worksheets = workbook->querySubObject("Sheets");
-	auto worksheet = worksheets->querySubObject("Item(int)", 1);
-
-	//设置输出范围
-	QString range = "A1:";
-	
-	char firstLetter = ' ';
-	if (column/26)
-	{
-		firstLetter = 'A' + column / 26 - 1;
+	catch (...) {
+		qCritical() << "删除sheet失败...";
+		return false;
 	}
-	if (firstLetter == ' ')
-	{
-		QChar secLetter = column % 26 - 1 + 'A';
-		range += QString(firstLetter) + QString(secLetter) + QString::number(row);
-	}
-	else
-	{
-		QChar letter = column % 26 - 1 + 'A';
-		range += QString(letter) + QString::number(row);
-	}
-	auto user_range = worksheet->querySubObject("Range(const QString&)", range);
-
-
-	//写入存储值
-	user_range->setProperty("Value", var);
-	workbook->dynamicCall("SaveAs(const QString&)", QDir::toNativeSeparators(file));
-
-	workbook->dynamicCall("Close(Boolean)", false);
-	excel->dynamicCall("Quit(void)");
+	return true;
 }
 
-void ExcelOperator::CastListListVariant2Variant(QList<QList<QVariant>> &cells, QVariant &res)
+bool ExcelOperator::delSheet(int index)
 {
-	QVariantList vars;
-	const int rows = cells.size();
-	for (int i = 0;i < rows; ++i)
-	{
-		vars.append(QVariant(cells[i]));
+	try {
+		QAxObject *pFirstSheet = m_pWorksheets->querySubObject("Item(int)", index);
+		pFirstSheet->dynamicCall("delete");
 	}
-	res = QVariant(vars);
+	catch (...) {
+		qCritical() << "删除sheet失败...";
+		return false;
+	}
+	return true;
+}
+
+QAxObject* ExcelOperator::getSheet(QString name)
+{
+	QAxObject* pWorkSheet = NULL;
+	try {
+		pWorkSheet = m_pWorksheets->querySubObject("Item(QString)", name);
+	}
+	catch (...) {
+		qCritical() << "获取sheet失败...";
+	}
+	return pWorkSheet;
+}
+
+QAxObject* ExcelOperator::getSheet(int index)
+{
+	QAxObject* pWorkSheet = NULL;
+	try {
+		pWorkSheet = m_pWorksheets->querySubObject("Item(int)", index);
+	}
+	catch (...) {
+		qCritical() << "获取sheet失败...";
+	}
+	return pWorkSheet;
+}
+
+QAxObject* ExcelOperator::getRows(QAxObject* pSheet)
+{
+	QAxObject* pRows = NULL;
+	try {
+		pRows = pSheet->querySubObject("Rows");
+	}
+	catch (...) {
+		qCritical() << "获取行失败...";
+	}
+	return pRows;
+}
+
+int ExcelOperator::getRowsCount(QAxObject* pSheet)
+{
+	int rows = 0;
+	try {
+		QAxObject* pRows = getRows(pSheet);
+		rows = pRows->property("Count").toInt();
+	}
+	catch (...) {
+		qCritical() << "获取行数失败...";
+	}
+	return rows;
+}
+
+QAxObject* ExcelOperator::getColumns(QAxObject* pSheet)
+{
+	QAxObject* pColumns = NULL;
+	try {
+		pColumns = pSheet->querySubObject("Columns");
+	}
+	catch (...) {
+		qCritical() << "获取列失败...";
+	}
+	return pColumns;
+}
+
+int ExcelOperator::getColumnsCount(QAxObject* pSheet)
+{
+	int columns = 0;
+	try {
+		QAxObject* pColumns = getColumns(pSheet);
+		columns = pColumns->property("Count").toInt();
+	}
+	catch (...) {
+		qCritical() << "获取列数失败...";
+	}
+	return columns;
+}
+
+QString ExcelOperator::getCell(QAxObject* pSheet, int row, int column)
+{
+	QString strCell = "";
+	try {
+		QAxObject* pCell = pSheet->querySubObject("Cells(int, int)", row, column);
+		strCell = pCell->property("Value").toString();
+	}
+	catch (...) {
+		qCritical() << "获取单元格信息失败...";
+	}
+
+	return strCell;
+}
+
+QString ExcelOperator::getCell(QAxObject* pSheet, QString number)
+{
+	QString strCell = "";
+	try {
+		QAxObject* pCell = pSheet->querySubObject("Range(QString)", number);
+		strCell = pCell->property("Value").toString();
+	}
+	catch (...) {
+		qCritical() << "获取单元格信息失败...";
+	}
+
+	return strCell;
+}
+
+bool ExcelOperator::setCell(QAxObject* pSheet, int row, int column, QString value)
+{
+	try {
+		QAxObject* pCell = pSheet->querySubObject("Cells(int, int)", row, column);
+		pCell->setProperty("Value", value);
+	}
+	catch (...) {
+		qCritical() << "写入单元格信息失败...";
+		return false;
+	}
+	return true;
+}
+
+bool ExcelOperator::setCell(QAxObject* pSheet, QString number, QString value)
+{
+	try {
+		QAxObject* pCell = pSheet->querySubObject("Range(QString)", number);
+		pCell->setProperty("Value", value);
+	}
+	catch (...) {
+		qCritical() << "写入单元格信息失败...";
+		return false;
+	}
+	return true;
 }

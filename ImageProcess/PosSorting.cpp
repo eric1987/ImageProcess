@@ -3,6 +3,7 @@
 void JouAVDecode(QString str, PosInfo &pd)
 {
 	QStringList datas = str.split('\t');
+	datas.removeAll("");
 
 	pd.index = datas[0].toInt();
 	QStringList strTime = datas[1].split('T');
@@ -15,18 +16,23 @@ void JouAVDecode(QString str, PosInfo &pd)
 	pd.latitude = datas[2].toFloat();
 	pd.longitude = datas[3].toFloat();
 	pd.altitude = datas[4].toFloat();
-	pd.pitching = datas[5].toFloat();
-	pd.rolling = datas[6].toFloat();
-	pd.driftAngle = datas[7].toFloat();
-	pd.heading = datas[8].toFloat();
-	pd.groundSpeed = datas[9].toFloat();
+// 	pd.pitching = datas[5].toFloat();
+// 	pd.rolling = datas[6].toFloat();
+// 	pd.driftAngle = datas[7].toFloat();
+// 	pd.heading = datas[8].toFloat();
+// 	pd.groundSpeed = datas[9].toFloat();
 }
 
 void DJIDecode(QString str, PosInfo &pd)
 {
 	QStringList datas = str.split('\t');
+	datas.removeAll("");
 
 	QDate date = QDate::fromString(datas[0], "yyyyMMdd");
+	if (datas[1].length() == 5)
+	{
+		datas[1].insert(0, "0");
+	}
 	QTime t = QTime::fromString(datas[1], "hhmmss");
 	pd.timestamp = QDateTime(date, t).toSecsSinceEpoch();
 	QString time = datas[1];
@@ -104,12 +110,15 @@ void PosSorting::sortingPosData()
 	}
 
 	PosInfo lastpos = m_posInfo[0];
-	QList<PosInfo> fightViewData;
+	QList<PosInfo> fightData;
+	fightData.append(lastpos);
+
 	int sortie = 0;
 	for (int i = 1; i < m_posInfo.size(); ++i)
 	{
 		//若新数据高度大于旧数据高度100以上，说明该数据为正式拍摄数据
 		//则丢掉之前的数据统计，重新开始统计
+#if 0
 		if (m_posInfo[i].altitude - lastpos.altitude > m_minAltitudeVariation)
 		{
 			lastpos = m_posInfo[i];
@@ -118,28 +127,28 @@ void PosSorting::sortingPosData()
 
 		m_totalGap += m_posInfo[i].timestamp - lastpos.timestamp;
 		++m_count;
+#endif
 
 		//更换架次
-		if (m_posInfo[i].timestamp - lastpos.timestamp > m_averageGap * m_sortieTime)
+		if (fabs(m_posInfo[i].timestamp - lastpos.timestamp) > m_fightGap || fabs(m_posInfo[i].altitude - lastpos.altitude) > m_altitudeIntercept)
 		{
 			//判断单架次数量大于最小数，才可存入架次数据中
-			if (fightViewData.size() > m_fightImageMinNum)
+			if (fightData.size() > m_fightImageMinNum)
 			{
-				m_posInfoSorted.insert(sortie++, fightViewData);
+				m_posInfoSorted.insert(sortie++, fightData);
 			}
-			fightViewData.clear();
-			initGap();
+			fightData.clear();
+			//initGap();
 		}
 
-
-		fightViewData.append(m_posInfo[i]);
+		fightData.append(m_posInfo[i]);
 		lastpos = m_posInfo[i];
 	}
 
 	//将最后的架次数据加入到总数据中
-	if (fightViewData.size() > m_fightImageMinNum)
+	if (fightData.size() > m_fightImageMinNum)
 	{
-		m_posInfoSorted.insert(sortie++, fightViewData);
+		m_posInfoSorted.insert(sortie++, fightData);
 	}
 }
 
@@ -156,7 +165,7 @@ void PosSorting::readPos(QString file, QList<PosInfo> &info)
 	{
 		QByteArray line = data.readLine();
 		QString str(line);
-		if (m_posType == 1 && firstLine)
+		if (m_posType == 0 && firstLine)
 		{
 			firstLine = false;
 			continue;

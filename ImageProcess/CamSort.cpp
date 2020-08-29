@@ -14,12 +14,6 @@ CamSort::~CamSort()
 {
 }
 
-void CamSort::test()
-{
-	refreshSDInfo();
-	getImageExif();
-}
-
 void CamSort::init()
 {
 	ui.selectPosType->addItem(QStringLiteral("大疆"));
@@ -34,7 +28,7 @@ void CamSort::init()
 	
 	m_transfer = new Transfer;
 
-	test();
+	refreshSDInfo();
 }
 
 void CamSort::connects()
@@ -54,6 +48,7 @@ void CamSort::connects()
 
 void CamSort::selectPosFiles()
 {
+	ui.posWidget->clear();
 	QFileDialog *fileDialog = new QFileDialog;
 	fileDialog->setWindowTitle(QStringLiteral("选择pos文件"));
 	fileDialog->setNameFilter(tr("Images(*.txt)"));
@@ -66,7 +61,6 @@ void CamSort::selectPosFiles()
 		fileNames = fileDialog->selectedFiles();
 	}
 	m_posFiles = fileNames;
-
 	ui.posWidget->addItems(fileNames);
 }
 

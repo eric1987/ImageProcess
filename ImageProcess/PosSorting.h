@@ -62,6 +62,8 @@ private:
 	int m_totalGap = 2;						///<总间隔
 	int m_count = 1;						///<间隔数
 	float m_averageGap = 2.0;				///<平均间隔
+	const int m_fightGap = 200;				//架次间隔
+	const int m_altitudeIntercept = 100;	//高度差
 	const int m_sortieTime = 100;			///<架次时间间隔相对于照片间隔的倍率
 	const int m_fightImageMinNum = 30;		///<架次最少拍摄照片数量
 
