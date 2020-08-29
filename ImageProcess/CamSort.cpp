@@ -41,6 +41,7 @@ void CamSort::connects()
 	connect(ui.startSave, &QToolButton::clicked, this, &CamSort::sortTransfer);
 	connect(ui.selectSavePath, &QPushButton::clicked, this, &CamSort::setSavePath);
 	connect(ui.lineEdit, &QLineEdit::textChanged, this, &CamSort::changeSavePath);
+	connect(ui.checkBox, &QCheckBox::stateChanged, this, &CamSort::setCheckSorties);
 
 	connect(m_transfer, &Transfer::signalProcess, this, &CamSort::refreshProcess, Qt::QueuedConnection);
 	connect(m_transfer, &Transfer::signalSortieTransFinished, this, &CamSort::transFinished, Qt::QueuedConnection);
@@ -317,6 +318,7 @@ void CamSort::sortTransfer()
 		ui.startSave->setChecked(true);
 		unableOperation();
 
+		rePosAndSave(m_transferSortie);
 	}
 	else       //停止传输
 	{
@@ -414,3 +416,79 @@ void CamSort::transFinished()
 	ui.startSave->setChecked(false);
 	enableOperation();
 }
+
+void CamSort::rePosAndSave(QList<int> sorties)
+{
+	//查找影像与pos数量相同的架次
+	QList<int> rePos;
+	Q_FOREACH(int i, sorties)
+	{
+		int sizePos = m_posData.value(i).size();
+		QMapIterator<QString, UDisk *> iter(m_disks);
+		bool isSizeSame = true;
+		while (iter.hasNext())
+		{
+			iter.next();
+			if (iter.value()->imageData[i].size() != sizePos)
+			{
+				isSizeSame = false;
+			}
+		}
+		if (isSizeSame)
+		{
+			rePos.append(i);
+		}
+	}
+
+	Q_FOREACH(int i, rePos)
+	{
+		QMapIterator<QString, UDisk *> iter(m_disks);
+		while (iter.hasNext())
+		{
+			iter.next();
+			QString posFile = setSaveReposFileName(iter.value()->cam, i, m_savePath);
+			QFile file(posFile);
+			if (!file.open(QIODevice::WriteOnly))
+			{
+				Log::INFO(QStringLiteral("打开reppos文件失败。"));
+				return;
+			}
+			QTextStream out(&file);
+			
+			QList<ImageInfo> images = iter.value()->imageData[i];
+			QList<PosInfo> pos = m_posData.value(i);
+			for (int k = 0; k < images.size(); k++)
+			{
+				QString insert = QString("%1%2").arg(Util::getParentFloder(images[k].fileName)).arg(i, 2, 10, QLatin1Char('0'));
+				QString fileName = images[k].imageName.insert(2, insert);
+
+				out << fileName << "   " << pos[k].date << "   " << pos[k].time
+					<< "   " << pos[k].latitude << "   " << pos[k].longitude
+					<< "   " << pos[k].altitude << endl;
+			}
+			file.close();
+		}
+	}
+	
+}
+
+QString CamSort::setSaveReposFileName(QString cam, int sortie, QString path)
+{
+	QDir dir(path);
+	QString file = dir.absolutePath() + QStringLiteral("/相机") + cam + QStringLiteral("架次%1.txt").arg(sortie);
+	return file;
+}
+
+void CamSort::setCheckSorties(int state)
+{
+	QObjectList	children = ui.sortWidget->children();
+	Q_FOREACH(QObject *obj, children)
+	{
+		CustomSortie *sortie = qobject_cast<CustomSortie*>(obj);
+		if (sortie != nullptr)
+		{
+			sortie->setState(state);
+		}
+	}
+}
+

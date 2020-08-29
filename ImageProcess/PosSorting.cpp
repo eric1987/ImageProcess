@@ -29,6 +29,7 @@ void DJIDecode(QString str, PosInfo &pd)
 	datas.removeAll("");
 
 	QDate date = QDate::fromString(datas[0], "yyyyMMdd");
+	pd.date = datas[0];
 	if (datas[1].length() == 5)
 	{
 		datas[1].insert(0, "0");

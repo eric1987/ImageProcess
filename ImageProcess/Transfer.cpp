@@ -141,7 +141,7 @@ QString Transfer::createDir(int sortie, QString nickname)
 
 bool Transfer::sortieTransferSingleFile(QString srcFile, QString dstPath, int sortie, QString dstName)
 {
-	QString insert = QString("%1%2").arg(getParentFloder(srcFile)).arg(sortie, 2, 10, QLatin1Char('0'));
+	QString insert = QString("%1%2").arg(Util::getParentFloder(srcFile)).arg(sortie, 2, 10, QLatin1Char('0'));
 	QString fileName = dstName.insert(2, insert);
 	QString absoluteFile = dstPath + "/" + fileName;
 
@@ -164,6 +164,7 @@ bool Transfer::sortieTransferSingleFile(QString srcFile, QString dstPath, int so
 	
 }
 
+#if 0
 QString Transfer::getParentFloder(QString srcFile)
 {
 	QString pattern = "\\d{3}MSDCF";
@@ -174,6 +175,7 @@ QString Transfer::getParentFloder(QString srcFile)
 
 	return folder.at(2);
 }
+#endif
 
 void Transfer::directTransfer()
 {
@@ -243,7 +245,7 @@ void Transfer::directTransfer()
 
 bool Transfer::directTransferSingleFile(QString path, QString srcFile, QString dstPath)
 {
-	QString insertStr = getParentFloder(path) + QString("00");
+	QString insertStr = Util::getParentFloder(path) + QString("00");
 	QString temp = srcFile;
 	QString finalName = temp.insert(2, insertStr);
 	QFile imageFile(path + "/" + srcFile);

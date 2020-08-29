@@ -11,6 +11,7 @@
 #include <QHBoxLayout>
 #include <QThread>
 #include <QMessageBox>
+#include <QTextStream>
 
 #include "ui_CamSort.h"
 #include "CamSD.h"
@@ -20,6 +21,7 @@
 #include "PosSorting.h"
 #include "SortieWidget.h"
 #include "Transfer.h"
+#include "Util.h"
 
 //TODO: 生成excel文件
 
@@ -47,6 +49,11 @@ public:
 		connect(btn, &QPushButton::clicked, this, &CustomSortie::showSortie);
 	}
 	~CustomSortie(){}
+
+	void setState(int state)
+	{
+		box->setCheckState(Qt::CheckState(state));
+	}
 
 signals:
 	void signalCheckChanged(int state, int sortie);
@@ -140,6 +147,15 @@ private:
 
 	//架次传输完成
 	void transFinished();
+
+	//修改pos并保存
+	void rePosAndSave(QList<int> sorties);
+
+	//命名转存pos文件名称
+	QString setSaveReposFileName(QString cam, int sortie, QString path);
+
+	//全选或全部选架次
+	void setCheckSorties(int state);
 
 private:
 	Ui::CamSort ui;

@@ -24,6 +24,8 @@ struct PosInfo
 	float groundSpeed = 0.0;	///<地速
 	int type = -1;				///<数据类型，-1：初始值，0：舍弃，1：留用
 
+	QString date;
+	QString id;
 };
 
 struct ImageInfo

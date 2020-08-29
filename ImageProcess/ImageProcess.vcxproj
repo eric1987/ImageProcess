@@ -109,6 +109,7 @@
     <ClCompile Include="SortieWidget.cpp" />
     <ClCompile Include="TableModel.cpp" />
     <ClCompile Include="Transfer.cpp" />
+    <ClCompile Include="Util.cpp" />
     <QtRcc Include="MainWindow.qrc" />
     <QtUic Include="CamSD.ui" />
     <QtUic Include="CamSort.ui" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <QtMoc Include="Util.h" />
     <QtMoc Include="ImageSelect.h" />
     <QtMoc Include="ExcelOperator.h" />
     <QtMoc Include="Transfer.h" />

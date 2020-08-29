@@ -7,6 +7,7 @@
 
 #include "Common.h"
 #include "Log/Log.h"
+#include "Util.h"
 
 enum TRANSTYPE { SORTIE = 1, DIRECT };	//SORTIE：按架次传输， DIRECT：直接传输
 
@@ -59,7 +60,7 @@ private:
 	bool sortieTransferSingleFile(QString srcFile, QString dstPath, int sortie, QString dstName);
 
 	//获取影像是在哪个文件夹下
-	QString getParentFloder(QString srcFile);
+	//QString getParentFloder(QString srcFile);
 
 	//直接传输方法
 	void directTransfer();

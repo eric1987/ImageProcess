@@ -25,7 +25,7 @@ void TableModel::initModel(QMap<QString, QList<ImageInfo>> images, QList<PosInfo
 		m_headList << QStringLiteral("相机%1").arg(it.key());
 	}
 	m_headList << QStringLiteral("纬度") << QStringLiteral("经度") 
-		<< QStringLiteral("高度") << QStringLiteral("地速");
+		<< QStringLiteral("高度");
 	setHorizontalHeaderLabels(m_headList);
 
 	QMap<QString, ImageInfo> rowInfo;
@@ -34,7 +34,7 @@ void TableModel::initModel(QMap<QString, QList<ImageInfo>> images, QList<PosInfo
 		rowInfo.clear();
 		for (QMap<QString, QList<ImageInfo>>::const_iterator it = images.begin(); it != images.end(); it++)
 		{
-			if (it.value().size() > m + 1)
+			if (it.value().size() > m )
 			{
 				rowInfo.insert(it.key(), it.value().at(m));
 			}

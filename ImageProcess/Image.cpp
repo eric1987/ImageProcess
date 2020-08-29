@@ -169,8 +169,6 @@ void Image::getImageInfo()
 
 void Image::sortieLocal()
 {
-
-
 	//¸ü»»¼Ü´Î
 	#if 0
 if (fabs(info.timestamp - m_info.timestamp) > m_averageGap * m_sortieTime)

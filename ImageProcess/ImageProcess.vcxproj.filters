@@ -74,6 +74,9 @@
     <ClCompile Include="ImageSelect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CamSort.h">
@@ -107,6 +110,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="ImageSelect.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Util.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
