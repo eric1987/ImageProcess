@@ -86,7 +86,6 @@ void PosSorting::setDisks(QMap<QString, UDisk*> *disks)
 void PosSorting::getPosSorted()
 {
 	getPosData();
-	m_posInfo;
 	sortingPosData();
 	isImageReady();
 	emit signalPosData(m_posInfoSorted);

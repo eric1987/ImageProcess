@@ -115,6 +115,9 @@
     <QtMoc Include="Util.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="CustomSortie.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CamSort.ui">

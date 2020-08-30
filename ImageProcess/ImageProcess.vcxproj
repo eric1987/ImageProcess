@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
+    <QtMoc Include="CustomSortie.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="Util.h" />
     <QtMoc Include="ImageSelect.h" />

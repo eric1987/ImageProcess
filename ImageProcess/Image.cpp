@@ -105,6 +105,11 @@ void Image::readAndSortLocalImage()
 	sortieLocal();
 }
 
+void Image::setImages(QStringList images)
+{
+	m_images = images;
+}
+
 void Image::nameContinuous(QString &name)
 {
 	int pos = m_reg->indexIn(name);
@@ -169,31 +174,33 @@ void Image::getImageInfo()
 
 void Image::sortieLocal()
 {
-	//更换架次
-	#if 0
-if (fabs(info.timestamp - m_info.timestamp) > m_averageGap * m_sortieTime)
+	Q_FOREACH(ImageInfo info, m_infos)
 	{
-		//判断架次中的image数量，少于50，为非正常拍摄。
-		if (m_sortieImageSize < m_fightImageMinNum)
-		{
-			for each (ImageInfo var in m_fightData)
-			{
-				var.type = 0;
-			}
-		}
-		else
-		{
-			m_disk->imageData.insert(m_sortie++, m_fightData);
-			m_fightData.clear();
-			m_sortieImageSize = 0;
-		}
+
 	}
 
-	info.type = 1;
-	m_sortieImageSize++;
-	m_fightData.append(info);
-	m_info = info;
-#endif
+	//if (fabs(info.timestamp - m_info.timestamp) > m_averageGap * m_sortieTime)
+	//{
+	//	//判断架次中的image数量，少于50，为非正常拍摄。
+	//	if (m_sortieImageSize < m_fightImageMinNum)
+	//	{
+	//		for each (ImageInfo var in m_fightData)
+	//		{
+	//			var.type = 0;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		m_disk->imageData.insert(m_sortie++, m_fightData);
+	//		m_fightData.clear();
+	//		m_sortieImageSize = 0;
+	//	}
+	//}
+
+	//info.type = 1;
+	//m_sortieImageSize++;
+	//m_fightData.append(info);
+	//m_info = info;
 }
 
 int Image::readSingleInfo(std::string file, ImageInfo &info)

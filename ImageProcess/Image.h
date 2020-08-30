@@ -32,6 +32,9 @@ public:
 	//读取本地路径下的图片信息
 	void readAndSortLocalImage();
 
+	//设置要读取与分类的图片信息
+	void setImages(QStringList images);
+
 signals:
 	void signalInfos(QMap<int, QList<ImageInfo>> m_sortedImage);
 	void signalSortFinish(UDisk *);
@@ -61,7 +64,6 @@ private:
 	ImageInfo m_info;							//last info
 	QList<ImageInfo> m_exifImages;					//所有待排序影像，均已获取exif信息
 	QList<ImageInfo> m_fightData;				//架次影像
-	
 
 	int m_sortieImageSize = 0;
 	int m_sortie = 0;
