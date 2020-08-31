@@ -105,6 +105,12 @@ private:
 
 	//全选或全部选架次
 	void setCheckSorties(int state);
+	
+	//读取config文件
+	void readConfig();
+
+	//解析配置文件
+	void decodeConfig(QString str, static int &value);
 
 private:
 	Ui::CamSort ui;

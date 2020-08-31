@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui.setupUi(this);
 
 	connects();
+
+	Log::Start();
 }
 
 void MainWindow::connects()

@@ -81,7 +81,7 @@ void Image::readInfo()
 		}
 	}
 
-	if (m_sortieImageSize < m_fightImageMinNum)
+	if (m_sortieImageSize < g_minFightImage)
 	{
 		for each (ImageInfo var in m_fightData)
 		{
@@ -130,11 +130,11 @@ void Image::nameContinuous(QString &name)
 void Image::sortie(ImageInfo info)
 {
 	//更换架次
-	if (fabs(info.timestamp - m_info.timestamp) > m_averageGap * m_sortieTime || 
-		fabs(info.size - m_info.size) > m_sizeDiff)
+	if (fabs(info.timestamp - m_info.timestamp) > g_fightGap || 
+		fabs(info.size - m_info.size) > g_sizeDiff)
 	{
 		//判断架次中的image数量，少于50，为非正常拍摄。
-		if (m_sortieImageSize < m_fightImageMinNum)
+		if (m_sortieImageSize < g_minFightImage)
 		{
 			/*for (int i = 0; i < m_fightData.size(); i++)
 			{

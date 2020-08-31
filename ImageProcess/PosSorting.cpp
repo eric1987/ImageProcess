@@ -2,47 +2,81 @@
 
 void JouAVDecode(QString str, PosInfo &pd)
 {
-	QStringList datas = str.split('\t');
-	datas.removeAll("");
+	QStringList line = str.split('\t');
+	line.removeAll("");
 
-	pd.index = datas[0].toInt();
-	QStringList strTime = datas[1].split('T');
-	QDate date = QDate::fromString(strTime[0], "yyyyMMdd");
-	QString strTimeTemp = strTime[1].remove(" ");
-	QTime t = QTime::fromString(strTimeTemp, "hh:mm:ss");
+	int i = 0;
+	QStringList strTime;
+	Q_FOREACH(QString var, line)
+	{
+		switch (i++)
+		{
+		case 0:
+			pd.index = var.toInt();
+			break;
+		case 1:
+			strTime = var.split('T');
+			if (strTime.size() > 2)
+			{
+				QDate date = QDate::fromString(strTime[0], "yyyyMMdd");
+				QString strTimeTemp = strTime[1].remove(" ");
+				QTime t = QTime::fromString(strTimeTemp, "hh:mm:ss");
 
-	pd.timestamp = QDateTime(date, t).toSecsSinceEpoch();
-	pd.time = strTime[1];
-	pd.latitude = datas[2].toFloat();
-	pd.longitude = datas[3].toFloat();
-	pd.altitude = datas[4].toFloat();
-// 	pd.pitching = datas[5].toFloat();
-// 	pd.rolling = datas[6].toFloat();
-// 	pd.driftAngle = datas[7].toFloat();
-// 	pd.heading = datas[8].toFloat();
-// 	pd.groundSpeed = datas[9].toFloat();
+				pd.timestamp = QDateTime(date, t).toSecsSinceEpoch();
+				pd.time = strTime[1];
+			}
+			break;
+		case 2:
+			pd.latitude = var.toFloat();
+			break;
+		case 3:
+			pd.longitude = var.toFloat();
+			break;
+		case 4:
+			pd.altitude = var.toFloat();
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void DJIDecode(QString str, PosInfo &pd)
 {
-	QStringList datas = str.split('\t');
-	datas.removeAll("");
+	QStringList line = str.split('\t');
+	line.removeAll("");
 
-	QDate date = QDate::fromString(datas[0], "yyyyMMdd");
-	pd.date = datas[0];
-	if (datas[1].length() == 5)
+	int i = 0;
+	Q_FOREACH(QString var, line)
 	{
-		datas[1].insert(0, "0");
+		switch (i++)
+		{
+		case 0:
+			pd.date = var;
+			break;
+		case 1:
+			pd.time = var.rightJustified(6, '0');
+			pd.timestamp = QDateTime(QDate::fromString(pd.date, "yyyyMMdd"), 
+				QTime::fromString(pd.time, "hhmmss")).toSecsSinceEpoch();
+			pd.time.insert(4, ":");
+			pd.time.insert(2, ":");
+			break;
+		case 2:
+			pd.index = var.toInt();
+			break;
+		case 3:
+			pd.latitude = var.toFloat();
+			break;
+		case 4:
+			pd.longitude = var.toFloat();
+			break;
+		case 5:
+			pd.altitude = var.toFloat();
+			break;
+		default:
+			break;
+		}
 	}
-	QTime t = QTime::fromString(datas[1], "hhmmss");
-	pd.timestamp = QDateTime(date, t).toSecsSinceEpoch();
-	QString time = datas[1];
-	time.insert(4, ":");
-	time.insert(2, ":");
-	pd.time = time;
-	pd.latitude = datas[3].toFloat();
-	pd.longitude = datas[4].toFloat();
-	pd.altitude = datas[5].toFloat();
 }
 
 PosSorting::PosSorting(QObject *parent)
@@ -130,10 +164,10 @@ void PosSorting::sortingPosData()
 #endif
 
 		//更换架次
-		if (fabs(m_posInfo[i].timestamp - lastpos.timestamp) > m_fightGap || fabs(m_posInfo[i].altitude - lastpos.altitude) > m_altitudeIntercept)
+		if (fabs(m_posInfo[i].timestamp - lastpos.timestamp) > g_fightGap || fabs(m_posInfo[i].altitude - lastpos.altitude) > g_altitudeIntercept)
 		{
 			//判断单架次数量大于最小数，才可存入架次数据中
-			if (fightData.size() > m_fightImageMinNum)
+			if (fightData.size() > g_minFightImage)
 			{
 				m_posInfoSorted.insert(sortie++, fightData);
 			}
@@ -146,7 +180,7 @@ void PosSorting::sortingPosData()
 	}
 
 	//将最后的架次数据加入到总数据中
-	if (fightData.size() > m_fightImageMinNum)
+	if (fightData.size() > g_minFightImage)
 	{
 		m_posInfoSorted.insert(sortie++, fightData);
 	}

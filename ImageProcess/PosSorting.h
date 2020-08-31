@@ -51,7 +51,7 @@ private:
 	{
 		m_totalGap = 2;
 		m_count = 1;
-		m_averageGap = 2.0;
+		//m_averageGap = 2.0;
 	}
 
 private:
@@ -61,11 +61,11 @@ private:
 	const int m_minAltitudeVariation = 100;	///<最小高度差
 	int m_totalGap = 2;						///<总间隔
 	int m_count = 1;						///<间隔数
-	float m_averageGap = 2.0;				///<平均间隔
-	const int m_fightGap = 200;				//架次间隔
-	const int m_altitudeIntercept = 100;	//高度差
-	const int m_sortieTime = 100;			///<架次时间间隔相对于照片间隔的倍率
-	const int m_fightImageMinNum = 30;		///<架次最少拍摄照片数量
+	//float m_averageGap = 2.0;				///<平均间隔
+	//const int m_fightGap = 200;				//架次间隔
+	//const int m_altitudeIntercept = 100;	//高度差
+	//const int m_sortieTime = 100;			///<架次时间间隔相对于照片间隔的倍率
+	//const int m_fightImageMinNum = 30;		///<架次最少拍摄照片数量
 
 	int m_posType = -1;						//pos文件存储类型
 	QMap<QString, UDisk*> *m_disks;			//用于判断影像分类是否准备完毕

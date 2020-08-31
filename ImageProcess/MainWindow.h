@@ -4,6 +4,7 @@
 #include <QStackedWidget>
 
 #include "ui_MainWindow.h"
+#include "Log/Log.h"
 
 class MainWindow : public QMainWindow
 {
