@@ -5,6 +5,7 @@
 
 #include "ui_SortieWidget.h"
 #include "TableModel.h"
+#include "Log/Log.h"
 
 class SortieWidget : public QWidget
 {

@@ -1,5 +1,9 @@
 #include "Image.h"
 
+int Image::m_fightGap = 200;
+int Image::m_sizeDiff = 5000000;
+int Image::m_minFightImages = 30;
+
 //查找一个ExifKey避免没有的Key产生段错误
 std::string FindExifKey(Exiv2::ExifData &ed, std::string key) {
 	Exiv2::ExifKey tmp = Exiv2::ExifKey(key);
@@ -73,7 +77,7 @@ void Image::readInfo()
 					Log::INFO(QStringLiteral("读取图片信息错误."));
 					return;
 				}
-				m_exifImages.append(info);
+				//m_exifImages.append(info);
 				sortie(info);
 			}
 
@@ -81,7 +85,7 @@ void Image::readInfo()
 		}
 	}
 
-	if (m_sortieImageSize < g_minFightImage)
+	if (m_sortieImageSize < m_minFightImages)
 	{
 		for each (ImageInfo var in m_fightData)
 		{
@@ -110,6 +114,13 @@ void Image::setImages(QStringList images)
 	m_images = images;
 }
 
+void Image::setConfig(int gap, int sizeDiff, int minImages)
+{
+	m_fightGap = gap;
+	m_sizeDiff = sizeDiff;
+	m_minFightImages = minImages;
+}
+
 void Image::nameContinuous(QString &name)
 {
 	int pos = m_reg->indexIn(name);
@@ -130,16 +141,19 @@ void Image::nameContinuous(QString &name)
 void Image::sortie(ImageInfo info)
 {
 	//更换架次
-	if (fabs(info.timestamp - m_info.timestamp) > g_fightGap || 
-		fabs(info.size - m_info.size) > g_sizeDiff)
+	if (fabs(info.timestamp - m_info.timestamp) > m_fightGap || 
+		fabs(info.size - m_info.size) > m_sizeDiff)
 	{
+		Log::INFO(QStringLiteral("时间间隔： %1， 照片大小差： %2").arg(m_fightGap).arg(m_sizeDiff));
+
 		//判断架次中的image数量，少于50，为非正常拍摄。
-		if (m_sortieImageSize < g_minFightImage)
+		if (m_sortieImageSize < m_minFightImages)
 		{
 			/*for (int i = 0; i < m_fightData.size(); i++)
 			{
 				m_fightData[i].type = 0;
 			}*/
+			Log::INFO(QStringLiteral("切换架次,起始影像为：%1,之前的影像数量太少，抛弃掉。").arg(info.fileName));
 			m_fightData.clear();
 		}
 		else
@@ -147,6 +161,7 @@ void Image::sortie(ImageInfo info)
 			m_disk->imageData.insert(m_sortie++, m_fightData);
 			m_fightData.clear();
 			m_sortieImageSize = 0;
+			Log::INFO(QStringLiteral("切换架次,起始影像为：%1。上一架次的截止为：%2").arg(info.fileName).arg(m_info.fileName));
 		}
 	}
 
@@ -250,6 +265,8 @@ int Image::readSingleInfo(std::string file, ImageInfo &info)
 		QDateTime dateTime = QDateTime::fromString(info.stime, "yyyy:MM:dd HH:mm:ss");
 		info.timestamp = dateTime.toSecsSinceEpoch();
 		info.size = fileSize;
+
+		Log::INFO(QStringLiteral("影像名称：%1， 影像拍摄时间： %2, 时间戳为： %3").arg(info.fileName).arg(info.stime).arg(info.timestamp));
 
 		return 0;
 	}

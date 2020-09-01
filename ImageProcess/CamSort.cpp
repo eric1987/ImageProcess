@@ -28,8 +28,9 @@ void CamSort::init()
 	
 	m_transfer = new Transfer;
 
-	refreshSDInfo();
 	readConfig();
+	refreshSDInfo();
+
 }
 
 void CamSort::connects()
@@ -505,20 +506,27 @@ void CamSort::readConfig()
 	QString fightMinImages = file.readLine();
 	QString altitudeIntercept = file.readLine();
 	QString imageSizeDiff = file.readLine();
+	
+	int gap;
+	decodeConfig(fightGap, gap);
+	int min;
+	decodeConfig(fightMinImages, min);
+	int alt;
+	decodeConfig(altitudeIntercept, alt);
+	int sizeDiff;
+	decodeConfig(imageSizeDiff, sizeDiff);
 
-	decodeConfig(fightGap, g_fightGap);
-	decodeConfig(fightMinImages, g_minFightImage);
-	decodeConfig(altitudeIntercept, g_altitudeIntercept);
-	decodeConfig(imageSizeDiff, g_sizeDiff);
+	Image::setConfig(gap, sizeDiff, min);
+	PosSorting::setConfig(gap, alt, min);
 
 	Log::INFO(QStringLiteral("读取配置文件成功"));
-	Log::INFO(QString("fightGap: %1").arg(g_fightGap));
-	Log::INFO(QString("fightMinImages: %1").arg(g_minFightImage));
-	Log::INFO(QString("altitudeIntercept: %1").arg(g_altitudeIntercept));
-	Log::INFO(QString("imageSizeDiff: %1").arg(g_sizeDiff));
+	Log::INFO(QString("fightGap: %1").arg(gap));
+	Log::INFO(QString("fightMinImages: %1").arg(min));
+	Log::INFO(QString("altitudeIntercept: %1").arg(alt));
+	Log::INFO(QString("imageSizeDiff: %1").arg(sizeDiff));
 }
 
-void CamSort::decodeConfig(QString str, static int &value)
+void CamSort::decodeConfig(QString str, int &value)
 {
 	QStringList configs = str.split(" ");
 	if (configs.size() == 3)

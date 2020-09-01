@@ -35,6 +35,8 @@ public:
 	//设置要读取与分类的图片信息
 	void setImages(QStringList images);
 
+	static void setConfig(int gap, int sizeDiff, int minImages);
+
 signals:
 	void signalInfos(QMap<int, QList<ImageInfo>> m_sortedImage);
 	void signalSortFinish(UDisk *);
@@ -71,6 +73,10 @@ private:
 	//const int m_sortieTime = 100;			///<架次时间间隔相对于照片间隔的倍率
 	//const int m_fightImageMinNum = 30;		///<架次最少拍摄照片数量
 	//int m_sizeDiff = 5000000;
+
+	static int m_fightGap;
+	static int m_sizeDiff;
+	static int m_minFightImages;
 
 	QStringList m_images;						//本地绝对路径下影像名称：用于影像排序
 	QList<ImageInfo> m_infos;					//影像对应的info

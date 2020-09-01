@@ -27,6 +27,9 @@ public:
 	//将pos数据架次化
 	void getPosSorted();
 
+	//设置配置
+	static void setConfig(int gap, int alt, int minImages);
+
 signals:
 	void signalPosData(QMap<int, QList<PosInfo>> );
 
@@ -58,14 +61,12 @@ private:
 	QList<PosInfo> m_posInfo;				///<pos数据
 	QStringList	m_posFiles;					///<pos文件
 	QMap<int, QList<PosInfo>> m_posInfoSorted;	//分架次后pos数据
-	const int m_minAltitudeVariation = 100;	///<最小高度差
 	int m_totalGap = 2;						///<总间隔
 	int m_count = 1;						///<间隔数
-	//float m_averageGap = 2.0;				///<平均间隔
-	//const int m_fightGap = 200;				//架次间隔
-	//const int m_altitudeIntercept = 100;	//高度差
-	//const int m_sortieTime = 100;			///<架次时间间隔相对于照片间隔的倍率
-	//const int m_fightImageMinNum = 30;		///<架次最少拍摄照片数量
+
+	static int m_fightGap;					//架次间隔
+	static int m_altitudeIntercept;			//高度差
+	static int m_minFightImages;			//架次最少影像数
 
 	int m_posType = -1;						//pos文件存储类型
 	QMap<QString, UDisk*> *m_disks;			//用于判断影像分类是否准备完毕

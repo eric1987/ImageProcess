@@ -1,5 +1,9 @@
 #include "PosSorting.h"
 
+int PosSorting::m_fightGap = 200;
+int PosSorting::m_altitudeIntercept = 100;
+int PosSorting::m_minFightImages = 30;
+
 void JouAVDecode(QString str, PosInfo &pd)
 {
 	QStringList line = str.split('\t');
@@ -125,6 +129,13 @@ void PosSorting::getPosSorted()
 	emit signalPosData(m_posInfoSorted);
 }
 
+void PosSorting::setConfig(int gap, int alt, int minImages)
+{
+	m_fightGap = gap;
+	m_altitudeIntercept = alt;
+	m_minFightImages = minImages;
+}
+
 void PosSorting::getPosData()
 {
 	m_posInfo.clear();
@@ -164,10 +175,10 @@ void PosSorting::sortingPosData()
 #endif
 
 		//更换架次
-		if (fabs(m_posInfo[i].timestamp - lastpos.timestamp) > g_fightGap || fabs(m_posInfo[i].altitude - lastpos.altitude) > g_altitudeIntercept)
+		if (fabs(m_posInfo[i].timestamp - lastpos.timestamp) > m_fightGap || fabs(m_posInfo[i].altitude - lastpos.altitude) > m_altitudeIntercept)
 		{
 			//判断单架次数量大于最小数，才可存入架次数据中
-			if (fightData.size() > g_minFightImage)
+			if (fightData.size() > m_minFightImages)
 			{
 				m_posInfoSorted.insert(sortie++, fightData);
 			}
@@ -180,7 +191,7 @@ void PosSorting::sortingPosData()
 	}
 
 	//将最后的架次数据加入到总数据中
-	if (fightData.size() > g_minFightImage)
+	if (fightData.size() > m_minFightImages)
 	{
 		m_posInfoSorted.insert(sortie++, fightData);
 	}

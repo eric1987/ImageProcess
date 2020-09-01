@@ -4,11 +4,6 @@
 #include <QMetaType>
 #include <QMap>
 
-static int g_minFightImage = 30;			//架次最小影像数
-static int g_altitudeIntercept = 100;		//用于区分架次的高度差
-static int g_fightGap = 200;				//架次间最小时间间隔，单位：s
-static int g_sizeDiff = 5000000;			//用于区分架次的影像大小差，单位：Byte
-
 struct ImageInfo;
 
 typedef	QList<ImageInfo> LineData;

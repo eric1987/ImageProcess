@@ -49,7 +49,7 @@ void SortieWidget::slotShowPic(QModelIndex index)
 {
 	QModelIndex ind = m_model->index(index.row(), index.column());
 	QString pic = m_model->data(ind, Qt::UserRole).value<QString>();
-
+	Log::INFO(QStringLiteral("打开影像文件路径：%1").arg(pic));
 	QPixmap img(pic);
 	QPixmap scaledImg = img.scaledToWidth(ui.imageLabel->width());
 

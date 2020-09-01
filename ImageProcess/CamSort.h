@@ -110,7 +110,7 @@ private:
 	void readConfig();
 
 	//½âÎöÅäÖÃÎÄ¼ş
-	void decodeConfig(QString str, static int &value);
+	void decodeConfig(QString str, int &value);
 
 private:
 	Ui::CamSort ui;
