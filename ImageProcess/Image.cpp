@@ -4,7 +4,7 @@ int Image::m_fightGap = 200;
 int Image::m_sizeDiff = 5000000;
 int Image::m_minFightImages = 30;
 
-//²éÕÒÒ»¸öExifKey±ÜÃâÃ»ÓĞµÄKey²úÉú¶Î´íÎó
+//æŸ¥æ‰¾ä¸€ä¸ªExifKeyé¿å…æ²¡æœ‰çš„Keyäº§ç”Ÿæ®µé”™è¯¯
 std::string FindExifKey(Exiv2::ExifData &ed, std::string key) {
 	Exiv2::ExifKey tmp = Exiv2::ExifKey(key);
 	Exiv2::ExifData::iterator pos = ed.findKey(tmp);
@@ -41,7 +41,7 @@ bool lessThan(const QString &s1, const QString &s2)
 {
 	if (s1.size() < 3 && s2.size() < 3)
 	{
-		Log::INFO(QStringLiteral("·Ç·¨µÄÎÄ¼ş¼ĞÂ·¾¶»òÎÄ¼ş£º%1£¬ %2 ").arg(s1).arg(s2));
+		Log::INFO(QStringLiteral("éæ³•çš„æ–‡ä»¶å¤¹è·¯å¾„æˆ–æ–‡ä»¶ï¼š%1ï¼Œ %2 ").arg(s1).arg(s2));
 	}
 	return s1 < s2;
 }
@@ -74,7 +74,7 @@ void Image::readInfo()
 				int ret = readSingleInfo((subPath + "/" + var).toStdString(), info);
 				if (ret < 0)
 				{
-					Log::INFO(QStringLiteral("¶ÁÈ¡Í¼Æ¬ĞÅÏ¢´íÎó."));
+					Log::INFO(QStringLiteral("è¯»å–å›¾ç‰‡ä¿¡æ¯é”™è¯¯."));
 					return;
 				}
 				//m_exifImages.append(info);
@@ -140,20 +140,21 @@ void Image::nameContinuous(QString &name)
 
 void Image::sortie(ImageInfo info)
 {
-	//¸ü»»¼Ü´Î
+	//æ›´æ¢æ¶æ¬¡
 	if (fabs(info.timestamp - m_info.timestamp) > m_fightGap || 
 		fabs(info.size - m_info.size) > m_sizeDiff)
 	{
-		Log::INFO(QStringLiteral("Ê±¼ä¼ä¸ô£º %1£¬ ÕÕÆ¬´óĞ¡²î£º %2").arg(m_fightGap).arg(m_sizeDiff));
+		Log::INFO(QStringLiteral("æ—¶é—´é—´éš”ï¼š %1ï¼Œ ç…§ç‰‡å¤§å°å·®ï¼š %2").arg(m_fightGap).arg(m_sizeDiff));
 
-		//ÅĞ¶Ï¼Ü´ÎÖĞµÄimageÊıÁ¿£¬ÉÙÓÚ50£¬Îª·ÇÕı³£ÅÄÉã¡£
+		//åˆ¤æ–­æ¶æ¬¡ä¸­çš„imageæ•°é‡ï¼Œå°‘äº50ï¼Œä¸ºéæ­£å¸¸æ‹æ‘„ã€‚
 		if (m_sortieImageSize < m_minFightImages)
 		{
 			/*for (int i = 0; i < m_fightData.size(); i++)
 			{
 				m_fightData[i].type = 0;
 			}*/
-			Log::INFO(QStringLiteral("ÇĞ»»¼Ü´Î,ÆğÊ¼Ó°ÏñÎª£º%1,Ö®Ç°µÄÓ°ÏñÊıÁ¿Ì«ÉÙ£¬Å×Æúµô¡£").arg(info.fileName));
+			Log::INFO(QStringLiteral("åˆ‡æ¢æ¶æ¬¡,èµ·å§‹å½±åƒä¸ºï¼š%1, ä¹‹å‰çš„å½±åƒæ•°é‡å¤ªå°‘ï¼ŒæŠ›å¼ƒæ‰ã€‚").arg(info.fileName));
+			Log::INFO(QStringLiteral("ä¸Šä¸€å½±åƒå¤§å°ä¸ºï¼š%1ï¼Œ å½“å‰å½±åƒå¤§å°ä¸ºï¼š%2").arg(m_info.size).arg(info.size));
 			m_fightData.clear();
 		}
 		else
@@ -161,7 +162,8 @@ void Image::sortie(ImageInfo info)
 			m_disk->imageData.insert(m_sortie++, m_fightData);
 			m_fightData.clear();
 			m_sortieImageSize = 0;
-			Log::INFO(QStringLiteral("ÇĞ»»¼Ü´Î,ÆğÊ¼Ó°ÏñÎª£º%1¡£ÉÏÒ»¼Ü´ÎµÄ½ØÖ¹Îª£º%2").arg(info.fileName).arg(m_info.fileName));
+			Log::INFO(QStringLiteral("åˆ‡æ¢æ¶æ¬¡,èµ·å§‹å½±åƒä¸ºï¼š%1ã€‚ä¸Šä¸€æ¶æ¬¡çš„æˆªæ­¢ä¸ºï¼š%2").arg(info.fileName).arg(m_info.fileName));
+			Log::INFO(QStringLiteral("ä¸Šä¸€å½±åƒå¤§å°ä¸ºï¼š%1ï¼Œ å½“å‰å½±åƒå¤§å°ä¸ºï¼š%2").arg(m_info.size).arg(info.size));
 		}
 	}
 
@@ -179,7 +181,7 @@ void Image::getImageInfo()
 		int ret = readSingleInfo(file.toStdString(), info);
 		if (ret < 0)
 		{
-			Log::INFO(QStringLiteral("¶ÁÈ¡Í¼Æ¬ĞÅÏ¢´íÎó."));
+			Log::INFO(QStringLiteral("è¯»å–å›¾ç‰‡ä¿¡æ¯é”™è¯¯."));
 			return;
 		}
 		m_infos.append(info);
@@ -196,7 +198,7 @@ void Image::sortieLocal()
 
 	//if (fabs(info.timestamp - m_info.timestamp) > m_averageGap * m_sortieTime)
 	//{
-	//	//ÅĞ¶Ï¼Ü´ÎÖĞµÄimageÊıÁ¿£¬ÉÙÓÚ50£¬Îª·ÇÕı³£ÅÄÉã¡£
+	//	//åˆ¤æ–­æ¶æ¬¡ä¸­çš„imageæ•°é‡ï¼Œå°‘äº50ï¼Œä¸ºéæ­£å¸¸æ‹æ‘„ã€‚
 	//	if (m_sortieImageSize < m_fightImageMinNum)
 	//	{
 	//		for each (ImageInfo var in m_fightData)
@@ -220,16 +222,16 @@ void Image::sortieLocal()
 
 int Image::readSingleInfo(std::string file, ImageInfo &info)
 {
-	//ÅĞ¶ÏÎÄ¼şÊÇ·ñÓĞĞ§  
+	//åˆ¤æ–­æ–‡ä»¶æ˜¯å¦æœ‰æ•ˆ  
 	if (!Exiv2::fileExists(file, true)) {
-		Log::INFO(QStringLiteral("»ñÈ¡ÎÄ¼şexifÊ±£¬ÎÄ¼ş²»´æÔÚ¡£"));
+		Log::INFO(QStringLiteral("è·å–æ–‡ä»¶exifæ—¶ï¼Œæ–‡ä»¶ä¸å­˜åœ¨ã€‚"));
 		return -1;
 	}
 
-	//»ñÈ¡ÎÄ¼ş´óĞ¡
+	//è·å–æ–‡ä»¶å¤§å°
 	FILE *FP = fopen(file.c_str(), "rb");
-	fseek(FP, 0, SEEK_END);			//¶¨Î»µ½ÎÄ¼şÄ© 
-	int fileSize = ftell(FP);       //ÎÄ¼ş³¤¶È
+	fseek(FP, 0, SEEK_END);			//å®šä½åˆ°æ–‡ä»¶æœ« 
+	int fileSize = ftell(FP);       //æ–‡ä»¶é•¿åº¦
 	fclose(FP);
 
 	try
@@ -237,16 +239,16 @@ int Image::readSingleInfo(std::string file, ImageInfo &info)
 		Exiv2::Image::AutoPtr &image = Exiv2::ImageFactory::open(file, false);
 		if (image.get() == 0)
 		{
-			Log::INFO(QStringLiteral("¶ÁÈ¡exifÊ§°Ü¡£"));
+			Log::INFO(QStringLiteral("è¯»å–exifå¤±è´¥ã€‚"));
 			return -2;
 		}
-		//¶ÁÈ¡ÕÕÆ¬µÄexifĞÅÏ¢  
+		//è¯»å–ç…§ç‰‡çš„exifä¿¡æ¯  
 		image->readMetadata();
-		Exiv2::ExifData ed = image->exifData();//µÃµ½exifĞÅÏ¢  
+		Exiv2::ExifData ed = image->exifData();//å¾—åˆ°exifä¿¡æ¯  
 
 		if (ed.empty())
 		{
-			Log::INFO(QStringLiteral("Î´·¢ÏÖexifĞÅÏ¢¡£"));
+			Log::INFO(QStringLiteral("æœªå‘ç°exifä¿¡æ¯ã€‚"));
 			return -3;
 		}
 
@@ -266,7 +268,7 @@ int Image::readSingleInfo(std::string file, ImageInfo &info)
 		info.timestamp = dateTime.toSecsSinceEpoch();
 		info.size = fileSize;
 
-		Log::INFO(QStringLiteral("Ó°ÏñÃû³Æ£º%1£¬ Ó°ÏñÅÄÉãÊ±¼ä£º %2, Ê±¼ä´ÁÎª£º %3").arg(info.fileName).arg(info.stime).arg(info.timestamp));
+		Log::INFO(QStringLiteral("å½±åƒåç§°ï¼š%1ï¼Œ å½±åƒæ‹æ‘„æ—¶é—´ï¼š %2, æ—¶é—´æˆ³ä¸ºï¼š %3").arg(info.fileName).arg(info.stime).arg(info.timestamp));
 
 		return 0;
 	}
@@ -276,27 +278,27 @@ int Image::readSingleInfo(std::string file, ImageInfo &info)
 		return -1;
 	}
 	
-	//std::cout << "ÕÕÆ¬³ß´ç	:" << FindExifKey(ed, "Exif.Photo.PixelYDimension") << " x " << FindExifKey(ed, "Exif.Photo.PixelXDimension") << std::endl;
+	//std::cout << "ç…§ç‰‡å°ºå¯¸	:" << FindExifKey(ed, "Exif.Photo.PixelYDimension") << " x " << FindExifKey(ed, "Exif.Photo.PixelXDimension") << std::endl;
 
-	//std::cout << "ÎÄ¼şÃû³Æ	:" << argv[1] << std::endl;
-	//std::cout << "ÎÄ¼ş´óĞ¡	:" << FileSize << std::endl;
-	//std::cout << "°æÈ¨	:" << FindExifKey(ed, "Exif.Image.Copyright") << std::endl;
-	//std::cout << "´´×÷ÈË	:" << FindExifKey(ed, "Exif.Image.Artist") << std::endl;
-	//std::cout << "Ïà»úÆ·ÅÆ	:" << FindExifKey(ed, "Exif.Image.Make") << std::endl;
-	//std::cout << "Ïà»úĞÍºÅ	:" << FindExifKey(ed, "Exif.Image.Model") << std::endl;
-	//std::cout << "¾µÍ·ĞÍºÅ	:" << FindExifKey(ed, "Exif.Photo.LensModel") << std::endl;
-	//std::cout << "¾µÍ·ĞòÁĞºÅ	:" << FindExifKey(ed, "Exif.Photo.LensSerialNumber") << std::endl;
+	//std::cout << "æ–‡ä»¶åç§°	:" << argv[1] << std::endl;
+	//std::cout << "æ–‡ä»¶å¤§å°	:" << FileSize << std::endl;
+	//std::cout << "ç‰ˆæƒ	:" << FindExifKey(ed, "Exif.Image.Copyright") << std::endl;
+	//std::cout << "åˆ›ä½œäºº	:" << FindExifKey(ed, "Exif.Image.Artist") << std::endl;
+	//std::cout << "ç›¸æœºå“ç‰Œ	:" << FindExifKey(ed, "Exif.Image.Make") << std::endl;
+	//std::cout << "ç›¸æœºå‹å·	:" << FindExifKey(ed, "Exif.Image.Model") << std::endl;
+	//std::cout << "é•œå¤´å‹å·	:" << FindExifKey(ed, "Exif.Photo.LensModel") << std::endl;
+	//std::cout << "é•œå¤´åºåˆ—å·	:" << FindExifKey(ed, "Exif.Photo.LensSerialNumber") << std::endl;
 	//std::cout << "ISO	:" << FindExifKey(ed, "Exif.Photo.ISOSpeedRatings") << std::endl;
-	//std::cout << "¹âÈ¦	:" << FindExifKey(ed, "Exif.Photo.FNumber") << std::endl;
-	//std::cout << "½¹¾à	:" << FindExifKey(ed, "Exif.Photo.FocalLength") << std::endl;
-	//std::cout << "¿ìÃÅ	:" << FindExifKey(ed, "Exif.Photo.ExposureTime") << std::endl;
-	//std::cout << "ÅÄÉãÊ±¼ä	:" << FindExifKey(ed, "Exif.Image.DateTime") << std::endl;
-	//std::cout << "ÉÁ¹âµÆ	:" << FindExifKey(ed, "Exif.CanonCs.FlashMode") << std::endl;
-	//std::cout << "Ë®Æ½·Ö±æÂÊ	:" << FindExifKey(ed, "Exif.Image.XResolution") << std::endl;
-	//std::cout << "´¹Ö±·Ö±æÂÊ	:" << FindExifKey(ed, "Exif.Image.YResolution") << std::endl;
-	//std::cout << "ÕÕÆ¬³ß´ç	:" << FindExifKey(ed, "Exif.Photo.PixelYDimension") << " x " << FindExifKey(ed, "Exif.Photo.PixelXDimension") << std::endl;
+	//std::cout << "å…‰åœˆ	:" << FindExifKey(ed, "Exif.Photo.FNumber") << std::endl;
+	//std::cout << "ç„¦è·	:" << FindExifKey(ed, "Exif.Photo.FocalLength") << std::endl;
+	//std::cout << "å¿«é—¨	:" << FindExifKey(ed, "Exif.Photo.ExposureTime") << std::endl;
+	//std::cout << "æ‹æ‘„æ—¶é—´	:" << FindExifKey(ed, "Exif.Image.DateTime") << std::endl;
+	//std::cout << "é—ªå…‰ç¯	:" << FindExifKey(ed, "Exif.CanonCs.FlashMode") << std::endl;
+	//std::cout << "æ°´å¹³åˆ†è¾¨ç‡	:" << FindExifKey(ed, "Exif.Image.XResolution") << std::endl;
+	//std::cout << "å‚ç›´åˆ†è¾¨ç‡	:" << FindExifKey(ed, "Exif.Image.YResolution") << std::endl;
+	//std::cout << "ç…§ç‰‡å°ºå¯¸	:" << FindExifKey(ed, "Exif.Photo.PixelYDimension") << " x " << FindExifKey(ed, "Exif.Photo.PixelXDimension") << std::endl;
 
-	/*std::cout << "\nÏÂÃæÊÇÔ­Ê¼ĞÅÏ¢:\n" << std::endl;
+	/*std::cout << "\nä¸‹é¢æ˜¯åŸå§‹ä¿¡æ¯:\n" << std::endl;
 	for (Exiv2::ExifData::iterator tmp = ed.begin(); tmp != ed.end(); tmp++) {
 	std::cout << tmp->tagName() << " (" << tmp->key() << ")       " << tmp->value() << std::endl;
 	}*/
