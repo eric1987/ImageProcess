@@ -1,4 +1,4 @@
-#include "Image.h"
+﻿#include "Image.h"
 
 int Image::m_fightGap = 200;
 int Image::m_sizeDiff = 5000000;
@@ -141,7 +141,8 @@ void Image::nameContinuous(QString &name)
 void Image::sortie(ImageInfo info)
 {
 	//更换架次
-	if (fabs(info.timestamp - m_info.timestamp) > m_fightGap)  // || fabs(info.size - m_info.size) > m_sizeDiff
+	if (fabs(info.timestamp - m_info.timestamp) > m_fightGap
+		|| fabs(info.size - m_info.size) > m_sizeDiff)  
 	{
 		Log::INFO(QStringLiteral("时间间隔： %1， 照片大小差： %2").arg(m_fightGap).arg(m_sizeDiff));
 
@@ -152,8 +153,8 @@ void Image::sortie(ImageInfo info)
 			{
 				m_fightData[i].type = 0;
 			}*/
-			Log::INFO(QStringLiteral("切换架次，起始影像为：%1， 架次影像数量少，抛弃。").arg(info.fileName));
-            Log::INFO(QStringLiteral("上一影像大小为：%1， 当前影像大小为：%2").arg(info.size).arg(m_info.size));
+			Log::INFO(QStringLiteral("切换架次,起始影像为：%1, 之前的影像数量太少，抛弃掉。").arg(info.fileName));
+			Log::INFO(QStringLiteral("上一影像大小为：%1， 当前影像大小为：%2").arg(m_info.size).arg(info.size));
 			m_fightData.clear();
 		}
 		else
@@ -161,8 +162,8 @@ void Image::sortie(ImageInfo info)
 			m_disk->imageData.insert(m_sortie++, m_fightData);
 			m_fightData.clear();
 			m_sortieImageSize = 0;
-			Log::INFO(QStringLiteral("切换架次，起始影像为：%1， 上一架次的截止为：%2").arg(info.fileName).arg(m_info.fileName));
-			Log::INFO(QStringLiteral("上一影像大小为：%1， 当前影像大小为：%2").arg(info.size).arg(m_info.size));
+			Log::INFO(QStringLiteral("切换架次,起始影像为：%1。上一架次的截止为：%2").arg(info.fileName).arg(m_info.fileName));
+			Log::INFO(QStringLiteral("上一影像大小为：%1， 当前影像大小为：%2").arg(m_info.size).arg(info.size));
 		}
 	}
 
