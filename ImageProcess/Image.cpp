@@ -141,8 +141,7 @@ void Image::nameContinuous(QString &name)
 void Image::sortie(ImageInfo info)
 {
 	//更换架次
-	if (fabs(info.timestamp - m_info.timestamp) > m_fightGap || 
-		fabs(info.size - m_info.size) > m_sizeDiff)
+	if (fabs(info.timestamp - m_info.timestamp) > m_fightGap)  // || fabs(info.size - m_info.size) > m_sizeDiff
 	{
 		Log::INFO(QStringLiteral("时间间隔： %1， 照片大小差： %2").arg(m_fightGap).arg(m_sizeDiff));
 
