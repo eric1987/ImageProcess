@@ -9,6 +9,8 @@
 #include "PosSorting.h"
 #include "CustomSortie.h"
 #include "SortieWidget.h"
+#include "ExcelOperator.h"
+#include "GenBlockFile.h"
 #include "ui_LocalSort.h"
 
 class LocalSort : public QWidget
@@ -37,6 +39,12 @@ private:
 	void imageAdd(bool state);
 	void addCamTab(int index);
 	QMap<QString, QList<ImageInfo>> getSortieImage(int sortie);
+	QMap<int, QMap<int, QList<ImageInfo>>> needToGenBlockSorts();
+	//QList<Block> genBlockContent();
+	void createBlockFile();
+	void slotGenBlockFinished();
+	void blockPathChanged();
+	void blockPathSelected();
 
 private:
 	Ui::LocalSort ui;
@@ -54,9 +62,10 @@ private:
 	QMap<int, QMap<int, QList<ImageInfo>>> m_images;
 	QMap<int, bool> m_imageisReady;
 	QVBoxLayout *m_sortLayout = nullptr;
-	QMap<int, bool> m_sortieSelectStatus;
+	QMap<int, bool> m_sortieSelectStatus;	//选择的架次
 	QMap<int, SortieWidget*> m_sortieWidgets;	//架次结果界面
-	QMap<int, bool> m_cams;
+	QMap<int, bool> m_cams;				//添加影像的相机状态，true代表添加了要分类的影像。
+	QString m_blockPath;
 
 	int m_addIndex = 1;
 };

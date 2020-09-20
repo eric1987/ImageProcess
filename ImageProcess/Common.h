@@ -44,6 +44,15 @@ struct ImageInfo
 	bool directTrans = false;
 };
 
+struct Block
+{
+	QString imageName;
+	QString groupName;
+	QString latitude;
+	QString longitude;
+	QString height;
+};
+
 struct ImageSD
 {
 	int imageSize;

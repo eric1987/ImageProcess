@@ -104,6 +104,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ExcelOperator.cpp" />
+    <ClCompile Include="GenBlockFile.cpp" />
     <ClCompile Include="ImageSelect.cpp" />
     <ClCompile Include="PosSorting.cpp" />
     <ClCompile Include="SortieWidget.cpp" />
@@ -142,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <QtMoc Include="CustomSortie.h" />
+    <QtMoc Include="GenBlockFile.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="Util.h" />
     <QtMoc Include="ImageSelect.h" />

@@ -77,6 +77,9 @@
     <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GenBlockFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CamSort.h">
@@ -116,6 +119,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="CustomSortie.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GenBlockFile.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

@@ -40,6 +40,10 @@ void LocalSort::connects()
 	connect(ui.widget5, &ImageSelect::signalImageEdit, this, &LocalSort::imageAdd);
 	connect(ui.widget6, &ImageSelect::signalImageEdit, this, &LocalSort::imageAdd);
 	//connect(ui.tabWidget1, &QTabWidget::tabBarClicked, this, &LocalSort::addCamTab);
+
+	connect(ui.lineEdit, &QLineEdit::textChanged, this, &LocalSort::blockPathChanged);
+	connect(ui.selectPath, &QPushButton::clicked, this, &LocalSort::blockPathSelected);
+	connect(ui.genBlockBtn, &QPushButton::clicked, this, &LocalSort::createBlockFile);
 }
 
 void LocalSort::slotOpenPos()
@@ -273,4 +277,79 @@ QMap<QString, QList<ImageInfo>> LocalSort::getSortieImage(int sortie)
 	}
 
 	return cams;
+}
+
+QMap<int, QMap<int, QList<ImageInfo>>> LocalSort::needToGenBlockSorts()
+{
+	QMap<int, QMap<int, QList<ImageInfo>>> cams;
+	QMapIterator<int, QMap<int, QList<ImageInfo>>> iter(m_images);
+	while (iter.hasNext())
+	{
+		iter.next();
+		QMap<int, QList<ImageInfo>> images;
+		for (size_t i = 0; i < m_sortieSelectStatus.size(); i++)
+		{
+			if (m_sortieSelectStatus[i] == true)
+			{
+				images.insert(i, iter.value().value(i));
+			}
+		}
+		cams.insert(iter.key(), images);
+	}
+	return cams;
+}
+
+void LocalSort::createBlockFile()
+{
+	QDir dir(m_blockPath);
+	QString file = dir.absolutePath()+"/" + "block.xlsx";
+	//QMap<int, QMap<int, QList<ImageInfo>>> images = needToGenBlockSorts();
+	//QList<Block> content = genBlockContent();
+
+	QList<int> sorties;
+	QMapIterator<int, bool> iter(m_sortieSelectStatus);
+	while (iter.hasNext())
+	{
+		iter.next();
+		if (iter.value() == true)
+		{
+			sorties.append(iter.key());
+		}
+	}
+
+	QMap<int, QMap<int, QList<ImageInfo>>> images;
+	QMapIterator<int, bool> iterCam(m_cams);
+	while (iterCam.hasNext())
+	{
+		iterCam.next();
+		if (iterCam.value() == true)
+		{
+			images.insert(iterCam.key(), m_images.value(iterCam.key()));
+		}
+	}
+
+	GenBlockFile *genBlock = new GenBlockFile;
+	genBlock->setFileAndImages(file, images);
+	genBlock->setPosAndSorties(m_posData, sorties);
+	connect(genBlock, &GenBlockFile::signalFinished, this, &LocalSort::slotGenBlockFinished);
+	genBlock->start();
+}
+
+void LocalSort::slotGenBlockFinished()
+{
+	QMessageBox::information(this, QStringLiteral("通知"), QStringLiteral("Block文件生成完毕。"));
+}
+
+void LocalSort::blockPathChanged()
+{
+	m_blockPath = ui.lineEdit->text();
+}
+
+void LocalSort::blockPathSelected()
+{
+	m_blockPath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+		"/home",
+		QFileDialog::ShowDirsOnly
+		| QFileDialog::DontResolveSymlinks);
+	ui.lineEdit->setText(m_blockPath);
 }
