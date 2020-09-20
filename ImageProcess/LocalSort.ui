@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>LocalSort</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="5">
+  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -44,52 +44,123 @@
          <property name="currentIndex">
           <number>0</number>
          </property>
+         <property name="tabsClosable">
+          <bool>false</bool>
+         </property>
          <widget class="QWidget" name="pos">
           <attribute name="title">
            <string>POS</string>
           </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0">
+          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1">
            <item>
-            <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label">
-               <property name="text">
-                <string>选择要分架次的pos文件</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QPushButton" name="selectPosFile">
-               <property name="text">
-                <string>打开</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_2">
-               <property name="text">
-                <string>选择pos文件的类型</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="selectPosType"/>
-             </item>
-            </layout>
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string>架次分类操作</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <layout class="QGridLayout" name="gridLayout">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>选择要分架次的pos文件</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QPushButton" name="selectPosFile">
+                  <property name="text">
+                   <string>打开</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
+                   <string>选择pos文件的类型</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="selectPosType"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QListWidget" name="posWidget"/>
+              </item>
+              <item>
+               <widget class="QPushButton" name="startSort">
+                <property name="text">
+                 <string>开始架次分类</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="posWidget"/>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QPushButton" name="startSort">
-               <property name="text">
-                <string>开始架次分类</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="title">
+              <string>架次分类查看</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0">
+              <item>
+               <widget class="QWidget" name="widget_7" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_9">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox">
+                   <property name="text">
+                    <string>架次全选</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="sortWidget" native="true"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget_8" native="true">
+                <layout class="QGridLayout" name="gridLayout_2">
+                 <item row="0" column="0">
+                  <widget class="QLineEdit" name="lineEdit"/>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QPushButton" name="selectPath">
+                   <property name="text">
+                    <string>选择文件路径</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QPushButton" name="genBlockBtn">
+                   <property name="text">
+                    <string>生成Block文件</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -99,7 +170,7 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="ImageSelect" name="widget" native="true"/>
+            <widget class="ImageSelect" name="widget1" native="true"/>
            </item>
           </layout>
          </widget>
@@ -109,7 +180,7 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="ImageSelect" name="widget_2" native="true"/>
+            <widget class="ImageSelect" name="widget2" native="true"/>
            </item>
           </layout>
          </widget>
@@ -119,7 +190,7 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
-            <widget class="ImageSelect" name="widget_3" native="true"/>
+            <widget class="ImageSelect" name="widget3" native="true"/>
            </item>
           </layout>
          </widget>
@@ -129,7 +200,7 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="ImageSelect" name="widget_4" native="true"/>
+            <widget class="ImageSelect" name="widget4" native="true"/>
            </item>
           </layout>
          </widget>
@@ -139,7 +210,7 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
-            <widget class="ImageSelect" name="widget_5" native="true"/>
+            <widget class="ImageSelect" name="widget5" native="true"/>
            </item>
           </layout>
          </widget>
@@ -149,7 +220,7 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_8">
            <item>
-            <widget class="ImageSelect" name="widget_6" native="true"/>
+            <widget class="ImageSelect" name="widget6" native="true"/>
            </item>
           </layout>
          </widget>

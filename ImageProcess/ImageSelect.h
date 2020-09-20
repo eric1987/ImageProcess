@@ -23,6 +23,7 @@ public:
 
 signals:
 	void signalSortedImages(QMap<int, QList<ImageInfo>> imageData);
+	void signalImageEdit(bool b);
 
 private:
 	void init();
@@ -31,7 +32,7 @@ private:
 	void slotAddImages();	//添加影像
 	void slotAddFolders();	//添加影像文件夹
 	void slotClearImages();	//清除影像
-	QFileInfoList getDirImages(QString path);	//获取路径下的影像
+	QStringList getDirImages(QString path);	//获取路径下的影像
 	void addImageToTable(QStringList images);	//将影像转化为model
 
 private:

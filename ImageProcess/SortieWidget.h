@@ -21,6 +21,12 @@ public:
 	*/
 	bool showDetail(QMap<QString, UDisk *> *disks, QList<PosInfo> pos, int num);
 
+	/**
+	* @brief 显示架次信息. cams 为影像数据， pos为pos数据，num：架次编号
+	* @return true：影响与pos数据一致，false，影像与pos数据不一致
+	*/
+	bool showDetail(QMap<QString, QList<ImageInfo>> cams, QList<PosInfo> pos, int num);
+
 	void setProgress(int percent);
 
 private:

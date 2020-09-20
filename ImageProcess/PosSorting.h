@@ -27,6 +27,9 @@ public:
 	//将pos数据架次化
 	void getPosSorted();
 
+	//本地pos数据架次化
+	void getLocPosSorted();
+
 	//设置配置
 	static void setConfig(int gap, int alt, int minImages);
 

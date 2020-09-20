@@ -129,6 +129,13 @@ void PosSorting::getPosSorted()
 	emit signalPosData(m_posInfoSorted);
 }
 
+void PosSorting::getLocPosSorted()
+{
+	getPosData();
+	sortingPosData();
+	emit signalPosData(m_posInfoSorted);
+}
+
 void PosSorting::setConfig(int gap, int alt, int minImages)
 {
 	m_fightGap = gap;

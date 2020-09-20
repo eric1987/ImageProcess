@@ -4,8 +4,11 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QMessageBox>
+#include <QVBoxLayout>
 
 #include "PosSorting.h"
+#include "CustomSortie.h"
+#include "SortieWidget.h"
 #include "ui_LocalSort.h"
 
 class LocalSort : public QWidget
@@ -29,6 +32,11 @@ private:
 	bool isDataPrepared();		//数据是否准备好
 	void receiveImageData(QMap<int, QList<ImageInfo>> imageData);
 	void sortiesDisplay();		//展示架次信息
+	void sortieSelectChanged(int state, int sortie);
+	void showSortieDetail(int sortie);
+	void imageAdd(bool state);
+	void addCamTab(int index);
+	QMap<QString, QList<ImageInfo>> getSortieImage(int sortie);
 
 private:
 	Ui::LocalSort ui;
@@ -43,5 +51,12 @@ private:
 	QMap<int, QList<ImageInfo>> m_image4;
 	QMap<int, QList<ImageInfo>> m_image5;
 	QMap<int, QList<ImageInfo>> m_image6;
+	QMap<int, QMap<int, QList<ImageInfo>>> m_images;
 	QMap<int, bool> m_imageisReady;
+	QVBoxLayout *m_sortLayout = nullptr;
+	QMap<int, bool> m_sortieSelectStatus;
+	QMap<int, SortieWidget*> m_sortieWidgets;	//架次结果界面
+	QMap<int, bool> m_cams;
+
+	int m_addIndex = 1;
 };

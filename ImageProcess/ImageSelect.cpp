@@ -21,7 +21,7 @@ void ImageSelect::sortImages()
 	image->moveToThread(thread);
 	image->setImages(m_images);
 
-	connect(image, &Image::signalInfos, this, &ImageSelect::signalSortedImages);
+	connect(image, &Image::signalInfos, this, &ImageSelect::signalSortedImages, Qt::QueuedConnection);
 	connect(thread, &QThread::started, image, &Image::readAndSortLocalImage);
 	connect(thread, &QThread::finished, thread, &QThread::deleteLater);
 	thread->start();
@@ -57,6 +57,10 @@ void ImageSelect::slotAddImages()
 		m_images += fileNames;
 		addImageToTable(fileNames);
 	}
+	if (!m_images.isEmpty())
+	{
+		emit signalImageEdit(true);
+	}
 }
 
 void ImageSelect::slotAddFolders()
@@ -66,9 +70,13 @@ void ImageSelect::slotAddFolders()
 		QFileDialog::ShowDirsOnly
 		| QFileDialog::DontResolveSymlinks);
 
-	//QStringList images = getDirImages(path);
-	//m_images += images;
-	//addImageToTable(images);
+	QStringList images = getDirImages(path);
+	m_images += images;
+	addImageToTable(images);
+	if (!m_images.isEmpty())
+	{
+		emit signalImageEdit(true);
+	}
 }
 
 void ImageSelect::slotClearImages()
@@ -77,20 +85,27 @@ void ImageSelect::slotClearImages()
 	ui.tableWidget->clear();
 	ui.tableWidget->setRowCount(0);
 	m_row = 0;
+
+	emit signalImageEdit(false);
 }
 
-QFileInfoList ImageSelect::getDirImages(QString path)
+QStringList ImageSelect::getDirImages(QString path)
 {
 	QDir dir(path);
+	QString basePath = dir.absolutePath() + "/";
 	QStringList paths = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
 	QStringList filters;
 	filters << "*.jpg" << "*.png" << "*.arw" << "*.cr2";
 	dir.setNameFilters(filters);
-	QFileInfoList files = dir.entryInfoList();
+	QStringList files = dir.entryList();
+	for (int i = 0; i < files.size(); i++)
+	{
+		files[i] = basePath + files[i];
+	}
 
 	Q_FOREACH(QString subpath, paths)
 	{
-		files += getDirImages(subpath);
+		files += getDirImages(basePath + subpath);
 	}
 
 	return files;

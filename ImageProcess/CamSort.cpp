@@ -247,6 +247,7 @@ void CamSort::showSorties(QMap<int, int> sorties)
 
 	//Ìí¼Ó¼Ü´Î
 	m_sortieSelectStatus.clear();
+	m_sortieWidgets.clear();
 	QMapIterator<int, int> iter(sorties);
 	while (iter.hasNext())
 	{

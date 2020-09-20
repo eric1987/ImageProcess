@@ -107,6 +107,7 @@ void Image::readAndSortLocalImage()
 {
 	getImageInfo();
 	sortieLocal();
+	emit signalInfos(m_sortedImage);
 }
 
 void Image::setImages(QStringList images)
@@ -191,33 +192,48 @@ void Image::getImageInfo()
 
 void Image::sortieLocal()
 {
+	m_sortedImage.clear();
 	Q_FOREACH(ImageInfo info, m_infos)
 	{
+		if (fabs(info.timestamp - m_info.timestamp) > m_fightGap
+			|| fabs(info.size - m_info.size) > m_sizeDiff)
+		{
+			Log::INFO(QStringLiteral("时间间隔： %1， 照片大小差： %2").arg(m_fightGap).arg(m_sizeDiff));
 
+			//判断架次中的image数量，少于50，为非正常拍摄。
+			if (m_sortieImageSize < m_minFightImages)
+			{
+				/*for (int i = 0; i < m_fightData.size(); i++)
+				{
+				m_fightData[i].type = 0;
+				}*/
+				Log::INFO(QStringLiteral("切换架次,起始影像为：%1, 之前的影像数量太少，抛弃掉。").arg(info.fileName));
+				Log::INFO(QStringLiteral("上一影像大小为：%1， 当前影像大小为：%2").arg(m_info.size).arg(info.size));
+				m_fightData.clear();
+			}
+			else
+			{
+				m_sortedImage.insert(m_sortie++, m_fightData);
+				m_fightData.clear();
+				m_sortieImageSize = 0;
+				Log::INFO(QStringLiteral("切换架次,起始影像为：%1。上一架次的截止为：%2").arg(info.fileName).arg(m_info.fileName));
+				Log::INFO(QStringLiteral("上一影像大小为：%1， 当前影像大小为：%2").arg(m_info.size).arg(info.size));
+			}
+		}
+
+		info.type = 1;
+		m_sortieImageSize++;
+		m_fightData.append(info);
+		m_info = info;
 	}
 
-	//if (fabs(info.timestamp - m_info.timestamp) > m_averageGap * m_sortieTime)
-	//{
-	//	//判断架次中的image数量，少于50，为非正常拍摄。
-	//	if (m_sortieImageSize < m_fightImageMinNum)
-	//	{
-	//		for each (ImageInfo var in m_fightData)
-	//		{
-	//			var.type = 0;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		m_disk->imageData.insert(m_sortie++, m_fightData);
-	//		m_fightData.clear();
-	//		m_sortieImageSize = 0;
-	//	}
-	//}
-
-	//info.type = 1;
-	//m_sortieImageSize++;
-	//m_fightData.append(info);
-	//m_info = info;
+	if (m_sortieImageSize >= m_minFightImages)
+	{
+		m_sortedImage.insert(m_sortie++, m_fightData);
+	}
+	m_fightData.clear();
+	m_sortieImageSize = 0;
+	m_sortie = 0;
 }
 
 int Image::readSingleInfo(std::string file, ImageInfo &info)

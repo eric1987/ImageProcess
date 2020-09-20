@@ -31,6 +31,18 @@ bool SortieWidget::showDetail(QMap<QString, UDisk *> *disks, QList<PosInfo> pos,
 	return same;
 }
 
+bool SortieWidget::showDetail(QMap<QString, QList<ImageInfo>> cams, QList<PosInfo> pos, int num)
+{
+	bool same = comparisonImageAndPos(cams, pos);
+	m_model->initModel(cams, pos);
+	ui.tableView->setModel(m_model);
+
+	ui.tableView->setAlternatingRowColors(true);
+	ui.tableView->setSelectionBehavior(QAbstractItemView::SelectItems);
+	ui.tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	return same;
+}
+
 bool SortieWidget::comparisonImageAndPos(QMap<QString, QList<ImageInfo>> images, QList<PosInfo> pos)
 {
 	QMapIterator<QString, QList<ImageInfo>> iter(images);
