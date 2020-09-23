@@ -42,7 +42,7 @@ private:
 	QMap<int, QMap<int, QList<ImageInfo>>> needToGenBlockSorts();
 	//QList<Block> genBlockContent();
 	void createBlockFile();
-	void slotGenBlockFinished();
+	void slotGenBlockFinished(bool b);
 	void blockPathChanged();
 	void blockPathSelected();
 
@@ -66,6 +66,7 @@ private:
 	QMap<int, SortieWidget*> m_sortieWidgets;	//架次结果界面
 	QMap<int, bool> m_cams;				//添加影像的相机状态，true代表添加了要分类的影像。
 	QString m_blockPath;
+	QString m_basePath;				//父目录
 
 	int m_addIndex = 1;
 };

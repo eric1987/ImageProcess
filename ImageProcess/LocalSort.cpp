@@ -302,7 +302,12 @@ QMap<int, QMap<int, QList<ImageInfo>>> LocalSort::needToGenBlockSorts()
 void LocalSort::createBlockFile()
 {
 	QDir dir(m_blockPath);
-	QString file = dir.absolutePath()+"/" + "block.xlsx";
+	QString path = dir.absolutePath();
+	if (path.endsWith('/'))
+	{
+		path = path.left(path.length()-1);
+	}
+	QString file = path +"/" + "block.xlsx";
 	//QMap<int, QMap<int, QList<ImageInfo>>> images = needToGenBlockSorts();
 	//QList<Block> content = genBlockContent();
 
@@ -335,9 +340,16 @@ void LocalSort::createBlockFile()
 	genBlock->start();
 }
 
-void LocalSort::slotGenBlockFinished()
+void LocalSort::slotGenBlockFinished(bool b)
 {
-	QMessageBox::information(this, QStringLiteral("通知"), QStringLiteral("Block文件生成完毕。"));
+	if (b)
+	{
+		QMessageBox::information(this, QStringLiteral("通知"), QStringLiteral("Block文件生成完毕。"));
+	}
+	else
+	{
+		QMessageBox::information(this, QStringLiteral("通知"), QStringLiteral("Block文件生成失败，请先进行架次分类并检查是否一致。"));
+	}
 }
 
 void LocalSort::blockPathChanged()
