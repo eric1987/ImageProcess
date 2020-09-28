@@ -104,6 +104,9 @@ private:
 	//直接传输文件
 	void transfer();
 
+	//设置传输完成状态
+	void setTransStateFinished();
+
 	//传输文件进度更新
 	void refreshProcess(int value);
 

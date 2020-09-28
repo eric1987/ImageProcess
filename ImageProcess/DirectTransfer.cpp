@@ -218,6 +218,13 @@ void DirectTransfer::transfer()
 	}
 }
 
+void DirectTransfer::setTransStateFinished()
+{
+	ui.startTransfer->setText(QStringLiteral("开始传输"));
+	ui.startTransfer->setChecked(false);
+	enableOperation();
+}
+
 void DirectTransfer::refreshProcess(int value)
 {
 	ui.progressBar->setValue(value);
@@ -232,7 +239,7 @@ void DirectTransfer::transferFinished()
 	ui.progressBar->setValue(100);
 	QMessageBox::information(this, QStringLiteral(""), QStringLiteral("架次文件传输完成。"));
 	Log::INFO(QStringLiteral("架次文件传输文件。"));
-	transfer();
+	setTransStateFinished();
 }
 
 void DirectTransfer::unableOperation()
