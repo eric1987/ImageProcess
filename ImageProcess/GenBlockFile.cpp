@@ -11,6 +11,15 @@ GenBlockFile::~GenBlockFile()
 
 void GenBlockFile::run()
 {
+	changeBlocksIntoExcelData();
+#if 0
+	if (m_genWay == LOCALWAY)
+	{
+	}
+	else if(m_genWay == REPOSWAY)
+	{
+		createBlockByRepos();
+	}
 	getBasePath();
 	prePareData();
 
@@ -47,59 +56,8 @@ void GenBlockFile::run()
 	QVariant res = QVariant(vars);
 
 	writeExcel(m_file, row + 1, column, res, m_basePath);
-
-#if 0
-	ExcelOperator excel;
-	excel.open(m_file);
-	//[1]
-	QAxObject *photoGroup = excel.addSheet("Photogroups");
-	
-	//[2]
-	QAxObject *photos = excel.addSheet("Photos");
-	int row = 1;
-	int column = 1;
-	excel.setCell(photos, row, column++, "Name");
-	excel.setCell(photos, row, column++, "PhotogroupName");
-	excel.setCell(photos, row, column++, "Directory");
-	excel.setCell(photos, row, column++, "Latitude");
-	excel.setCell(photos, row, column++, "Longitude");
-	excel.setCell(photos, row, column++, "Height");
-
-	Q_FOREACH(Block content, m_content)
-	{
-		row++;
-		column = 1;
-		excel.setCell(photos, row, column++, content.imageName);
-		excel.setCell(photos, row, column++, content.groupName);
-		excel.setCell(photos, row, column++, content.groupName);
-		excel.setCell(photos, row, column++, content.latitude);
-		excel.setCell(photos, row, column++, content.longitude);
-		excel.setCell(photos, row, column++, content.height);
-	}
-
-
-	//[3]
-	QAxObject *controlPoint = excel.addSheet("ControlPoint");
-	excel.setCell(controlPoint, 1, 1, "Name");
-	excel.setCell(controlPoint, 1, 2, "Easting");
-	excel.setCell(controlPoint, 1, 3, "Northing");
-	excel.setCell(controlPoint, 1, 4, "Height");
-
-	//[4]
-	QAxObject *options = excel.addSheet("Options");
-	excel.setCell(options, 1, 1, "OptionName");
-	excel.setCell(options, 1, 2, "Value");
-	excel.setCell(options, 3, 1, "SRS");
-	excel.setCell(options, 3, 2, "WGS84");
-	excel.setCell(options, 4, 1, "InRadians");
-	excel.setCell(options, 4, 2, "FALSE");
-	excel.setCell(options, 5, 1, "BaseImagePath");
-	//excel.setCell(options, 4, 1, "WGS84");
-
-	excel.close();
-#endif
-
 	emit signalFinished(true);
+#endif
 }
 
 void GenBlockFile::setFileAndImages(QString file, QMap<int, QMap<int, QList<ImageInfo>>> images)
@@ -112,6 +70,36 @@ void GenBlockFile::setPosAndSorties(QMap<int, QList<PosInfo>> posData, QList<int
 {
 	m_posData = posData;
 	m_sorties = sorties;
+}
+
+void GenBlockFile::setImages(QMap<int, QStringList> images)
+{
+
+}
+
+void GenBlockFile::setPosFile(QStringList files)
+{
+
+}
+
+void GenBlockFile::setGenWay(int type)
+{
+	m_genWay = type;
+}
+
+void GenBlockFile::setBlocks(QMap<int, QMap<int, QList<Block>>> blocks)
+{
+	m_blocks = blocks;
+}
+
+void GenBlockFile::setBasePath(QString path)
+{
+	m_basePath = path;
+}
+
+void GenBlockFile::setFile(QString file)
+{
+	m_file = file;
 }
 
 QList<int> GenBlockFile::getEqualSortie()
@@ -166,8 +154,22 @@ void GenBlockFile::prePareData()
 	}
 }
 
-void GenBlockFile::writeExcel(QString file, int row, int column, QVariant &var, QString basePath)
+bool GenBlockFile::writeExcel(QString file, int row, int column, QVariant &var, QString basePath)
 {
+	QFile temp(m_template);
+	bool copy = temp.copy(file);
+	if (copy)
+	{
+		Log::INFO(QStringLiteral("生成文件成功。"));
+	}
+	else
+	{
+		Log::INFO(QStringLiteral("block文件复制失败。"));
+		QMessageBox::warning(new QWidget, QStringLiteral("警告"), QStringLiteral("block文件复制失败, 确保生成文件路径下无block.xls文件。"));
+		return false;
+	}
+	temp.close();
+
 	auto excel = new QAxObject(this);
 	excel->setControl("Excel.Application");
 	excel->dynamicCall("SetVisible(boo Visible)", "false");
@@ -178,16 +180,29 @@ void GenBlockFile::writeExcel(QString file, int row, int column, QVariant &var, 
 	{
 		int x = 0;
 	}
-	workbooks->dynamicCall("Add");
-	auto workbook = excel->querySubObject("ActiveWorkBook");
+	workbooks->dynamicCall("Open (const QString&)", file); //filename
+	//workbooks->dynamicCall("Add");
+	//auto workbook = excel->querySubObject("Open(QString, QVariant)", file);
+	QAxObject *workbook = excel->querySubObject("ActiveWorkBook");
+	QAxObject *worksheets = workbook->querySubObject("Sheets");
+	QAxObject *pFirstSheet = worksheets->querySubObject("Item(QString)", "Photos");
+	pFirstSheet->dynamicCall("delete");
+	QAxObject *pSecSheet = worksheets->querySubObject("Item(QString)", "Options");
+	pSecSheet->dynamicCall("delete");
+	workbook->dynamicCall("Save(void)");
+	//workbook->dynamicCall("Close (Boolean)", false);
+	//excel->setProperty("DisplayAlerts", 1);
+	//return;
 
-	auto worksheets = workbook->querySubObject("Sheets");
-	auto worksheet = worksheets->querySubObject("Item(int)", 1);
-	worksheet->setProperty("Name","Photos");
+	QAxObject *firstSheet = worksheets->querySubObject("Item(int)", 1);
+	QAxObject *photoSheet = worksheets->querySubObject("Add(QVariant)", firstSheet->asVariant());
+	firstSheet->dynamicCall("Move(QVariant)", photoSheet->asVariant());
+	photoSheet->setProperty("Name", "Photos");  //设置工作表名称
+
+	//worksheet->setProperty("Name","Photos");
 	//worksheet->setObjectName("Photos");
 	//设置输出范围
 	QString range = "A1:";
-
 	char firstLetter = ' ';
 	if (column / 26)
 	{
@@ -203,22 +218,28 @@ void GenBlockFile::writeExcel(QString file, int row, int column, QVariant &var, 
 		QChar letter = column % 26 - 1 + 'A';
 		range += QString(letter) + QString::number(row);
 	}
-	auto user_range = worksheet->querySubObject("Range(const QString&)", range);
+	auto user_range = photoSheet->querySubObject("Range(const QString&)", range);
 	//写入存储值
 	user_range->setProperty("Value", var);
-
+	/*workbook->dynamicCall("Save(void)");
+	workbook->dynamicCall("Close(Boolean)", false);
+	excel->dynamicCall("Quit(void)");
+	delete excel;
+	return;*/
+	
 	int count = worksheets->property("Count").toInt();  //获取工作表数目
 	QAxObject *pLastSheet = worksheets->querySubObject("Item(int)", count);
 	auto optionSheet = worksheets->querySubObject("Add(QVariant)", pLastSheet->asVariant());
 	pLastSheet->dynamicCall("Move(QVariant)", optionSheet->asVariant());
 	optionSheet->setProperty("Name", "Options");  //设置工作表名称
-
 	writeOptions(optionSheet, basePath);
-
-	workbook->dynamicCall("SaveAs(const QString&)", QDir::toNativeSeparators(file));
-
+	//workbook->dynamicCall("SaveAs(const QString&)", QDir::toNativeSeparators(file));
+	workbook->dynamicCall("Save(void)");
 	workbook->dynamicCall("Close(Boolean)", false);
 	excel->dynamicCall("Quit(void)");
+	delete excel;
+
+	return true;
 }
 
 void GenBlockFile::writeOptions(QAxObject *optionSheet, QString path)
@@ -267,4 +288,58 @@ void GenBlockFile::getBasePath()
 			}
 		}
 	}
+}
+
+void GenBlockFile::createBlockByRepos()
+{
+
+}
+
+void GenBlockFile::changeBlocksIntoExcelData()
+{
+	int column = 6;	//由ImageInfo的数据种类决定
+	QMapIterator<int, QMap<int, QList<Block>>> iter(m_blocks);
+	int row = 0;
+	QVariantList vars;
+	QList<QList<QVariant>> v;
+	QList<QVariant> head;
+	head << QStringLiteral("Name") << QStringLiteral("PhotogroupName") << QStringLiteral("Directory")
+		<< QStringLiteral("Latitude") << QStringLiteral("Longitude") << QStringLiteral("Height");
+	v.append(head);
+	while (iter.hasNext())
+	{
+		iter.next();
+		QMapIterator<int, QList<Block>> iterSignal(iter.value());
+		while (iterSignal.hasNext())
+		{
+			iterSignal.next();
+			row += iterSignal.value().size();
+			Q_FOREACH(Block block, iterSignal.value())
+			{
+				QList<QVariant> rowData;
+				rowData.append(block.imageName);
+				rowData.append(block.groupName);
+				rowData.append(block.groupName);
+				rowData.append(block.latitude);
+				rowData.append(block.longitude);
+				rowData.append(block.height);
+				v.append(rowData);
+			}
+		}
+	}
+	if (row == 0)
+	{
+		emit signalFinished(false);
+		return;
+	}
+	for (int i = 0;i < row + 1; ++i)
+	{
+		vars.append(QVariant(v[i]));
+	}
+	QVariant res = QVariant(vars);
+	if (!writeExcel(m_file, row + 1, column, res, m_basePath))
+	{
+		return;
+	}
+	emit signalFinished(true);
 }

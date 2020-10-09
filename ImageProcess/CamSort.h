@@ -112,24 +112,22 @@ private:
 	//解析配置文件
 	void decodeConfig(QString str, int &value);
 
+	//关闭tab窗口
+	void onclosed(int index);
 private:
 	Ui::CamSort ui;
 	QVBoxLayout *m_sortLayout = nullptr;
-
 	QMap<QString, CamSD*> m_sdList;	//sd卡list，key：id，用来展示sd卡
 	QMap<QString, UDisk*> m_disks;	//sd卡信息，包括影像信息，用于架次分类
 	QMap<QString, SDInfo> m_sdInfo;	//sd信息，包括sd在线状态，存储容量等
 	QMap<int, QList<PosInfo>> m_posData;	//分架次后的pos数据
-
 	int m_posType = DAJ;			//pos类型
 	QString m_savePath;				//存储路径
 	QStringList m_posFiles;			//pos文件
 	QList<int> m_transferSortie;	//要传输的架次
 	int m_camNum = 0;				//
-
 	QMap<int, bool> m_sortieSelectStatus;	//架次选择状态
 	PosSorting *m_posSort = nullptr;
-	QMap<int, SortieWidget*> m_sortieWidgets;	//架次结果界面
-
+	QMap<int, int> m_sortieIndex;	//架次结果界面
 	Transfer *m_transfer = nullptr;
 };

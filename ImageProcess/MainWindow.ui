@@ -71,12 +71,25 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="block">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>生成block</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Maximum</enum>
+          <enum>QSizePolicy::Minimum</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -91,9 +104,13 @@
     </item>
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
       <widget class="CamSort" name="page_1"/>
       <widget class="LocalSort" name="page_2"/>
       <widget class="DirectTransfer" name="page_3"/>
+      <widget class="BlockInterface" name="page_4"/>
      </widget>
     </item>
    </layout>
@@ -136,6 +153,12 @@
    <class>DirectTransfer</class>
    <extends>QWidget</extends>
    <header>directtransfer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BlockInterface</class>
+   <extends>QWidget</extends>
+   <header>blockinterface.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

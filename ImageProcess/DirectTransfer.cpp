@@ -57,6 +57,7 @@ void DirectTransfer::init()
 
 	connect(ui.selectSavePath, &QPushButton::clicked, this, &DirectTransfer::setSavePath);
 	connect(ui.lineEdit, &QLineEdit::textChanged, this, &DirectTransfer::changeSavePath);
+	connect(ui.selectAll, &QCheckBox::stateChanged, this, &DirectTransfer::setCheckAll);
 }
 
 void DirectTransfer::directSelectChanged(int state, QString id)
@@ -268,5 +269,18 @@ void DirectTransfer::setSavePath()
 void DirectTransfer::changeSavePath(QString path)
 {
 	m_savePath = path;
+}
+
+void DirectTransfer::setCheckAll(int state)
+{
+	QObjectList	children = ui.sdWidget->children();
+	Q_FOREACH(QObject *obj, children)
+	{
+		CustomSD *sd = qobject_cast<CustomSD*>(obj);
+		if (sd != nullptr)
+		{
+			sd->setState(state);
+		}
+	}
 }
 

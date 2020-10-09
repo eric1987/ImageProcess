@@ -17,6 +17,9 @@ struct PosInfo
 	float latitude = 0.0;		///<纬度
 	float longitude = 0.0;		///<经度
 	float altitude = 0.0;		///<高度
+	QString strLat = "";
+	QString strLong = "";
+	QString strAlt = "";
 	float pitching = 0.0;		///<俯仰
 	float rolling = 0.0;		///<滚转
 	float driftAngle = 0.0;		///<航偏角

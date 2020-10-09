@@ -31,6 +31,16 @@ void Transfer::setSDCards(QStringList idList, QMap<QString, SDInfo> &sdInfo)
 	m_sdInfo = sdInfo;
 }
 
+void Transfer::setTransImages(QMap<QString, QMap<int, QList<ImageInfo>>> images)
+{
+	m_logcalImages = images;
+}
+
+void Transfer::setLocalTransSortie(QList<int> num)
+{
+	m_sorties = num;
+}
+
 void Transfer::stopTransfer()
 {
 	m_stop = true;
@@ -47,6 +57,8 @@ void Transfer::run()
 	case DIRECT:
 		directTransfer();
 		break;
+	case LOCAL:
+		localTransfer();
 	default:
 		break;
 	}
@@ -127,6 +139,24 @@ int Transfer::getSortieTotalSize()
 	return total;
 }
 
+int Transfer::getLocalTotalSize()
+{
+	int total = 0;
+	QMapIterator<QString, QMap<int, QList<ImageInfo>>> iter(m_logcalImages);
+	while (iter.hasNext())
+	{
+		iter.next();
+		Q_FOREACH(int sort, m_sorties)
+		{
+			if (iter.value().contains(sort))
+			{
+				total += iter.value()[sort].size();
+			}
+		}
+	}
+	return total;
+}
+
 QString Transfer::createDir(int sortie, QString nickname)
 {
 	QString path = QString("%1/%2").arg(sortie+1, 2, 10, QLatin1Char('0')).arg(nickname);
@@ -151,11 +181,10 @@ bool Transfer::sortieTransferSingleFile(QString srcFile, QString dstPath, int so
 		bool ret = file.copy(srcFile, absoluteFile);
 		if (m_transferCount++ >= m_sortieStep)
 		{
-			//m_transferSize++;
-			m_transferCount = 0;
-			
+			m_transferCount = 0;	
 			emit signalProcess(m_transferSize++);
 		}
+		return ret;
 	}
 	else
 	{
@@ -243,6 +272,54 @@ void Transfer::directTransfer()
 	emit signalDirectTransFinished();
 }
 
+void Transfer::localTransfer()
+{
+	m_sortieTotal = getLocalTotalSize();
+	m_transferSize = 0;
+	if (m_sortieTotal * 0.01 > 1)
+	{
+		m_sortieStep = m_sortieTotal * 0.01;
+	}
+	else
+	{
+		m_sortieStep = 1;
+	}
+
+	QMapIterator<QString, QMap<int, QList<ImageInfo>>> iter(m_logcalImages);
+	while (iter.hasNext())
+	{
+		iter.next();
+		QString camName = iter.key();
+		Q_FOREACH(int sort, m_sorties)
+		{
+			QString dst = createDir(sort, camName);
+			Q_FOREACH(ImageInfo image, iter.value()[sort])
+			{
+				if (m_stop)
+				{
+					Log::INFO(QStringLiteral("停止架次传输。"));
+					return;
+				}
+				if (image.transfer)
+				{
+					continue;
+				}
+				if (!sortieTransferSingleFile(image.fileName, dst, sort, image.imageName))
+				{
+					Log::INFO(QStringLiteral("架次传输失败，相机：%1，文件：%2").arg(camName).arg(image.fileName));
+					emit signalSortieTransFailed();
+					return;
+				}
+				else
+				{
+					image.transfer = true;
+				}
+			}
+		}
+	}
+	emit signalSortieTransFinished();
+}
+
 bool Transfer::directTransferSingleFile(QString path, QString srcFile, QString dstPath)
 {
 	QString insertStr = Util::getParentFloder(path) + QString("00");
@@ -260,6 +337,7 @@ bool Transfer::directTransferSingleFile(QString path, QString srcFile, QString d
 
 			emit signalDirectProcess(m_directTransSize / m_directStep);
 		}
+		return ret;
 	}
 	else
 	{

@@ -103,6 +103,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BlockInterface.cpp" />
     <ClCompile Include="ExcelOperator.cpp" />
     <ClCompile Include="GenBlockFile.cpp" />
     <ClCompile Include="ImageSelect.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="Transfer.cpp" />
     <ClCompile Include="Util.cpp" />
     <QtRcc Include="MainWindow.qrc" />
+    <QtUic Include="BlockInterface.ui" />
     <QtUic Include="CamSD.ui" />
     <QtUic Include="CamSort.ui" />
     <QtUic Include="DirectTransfer.ui" />
@@ -141,6 +143,7 @@
     <QtMoc Include="CamSD.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="BlockInterface.h" />
     <ClInclude Include="Common.h" />
     <QtMoc Include="CustomSortie.h" />
     <QtMoc Include="GenBlockFile.h" />

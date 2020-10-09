@@ -127,3 +127,8 @@ void ImageSelect::addImageToTable(QStringList images)
 		ui.tableWidget->setItem(m_row++, m_columnPath, itemPath);
 	}
 }
+
+QStringList ImageSelect::getImages()
+{
+	return m_images;
+}

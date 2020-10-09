@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QMap>
 
 class Util : public QObject
 {
@@ -12,4 +13,7 @@ public:
 
 	//获取影像是在哪个文件夹下
 	static QString getParentFloder(QString srcFile);
+
+	static QStringList getPosFile();
+	static bool compareImageAndPos(QMap<QString, int> imageSize, int posSize);
 };

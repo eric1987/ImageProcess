@@ -43,9 +43,12 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <property name="tabsClosable">
+      <bool>false</bool>
+     </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Tab 1</string>
+       <string>操作界面</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,4">
        <property name="spacing">

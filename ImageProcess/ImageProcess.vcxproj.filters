@@ -80,6 +80,9 @@
     <ClCompile Include="GenBlockFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BlockInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CamSort.h">
@@ -124,6 +127,9 @@
     <QtMoc Include="GenBlockFile.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="BlockInterface.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CamSort.ui">
@@ -142,6 +148,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ImageSelect.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="BlockInterface.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

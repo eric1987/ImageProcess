@@ -47,6 +47,11 @@ public:
 	}
 	~CustomSD() {}
 
+	void setState(int state)
+	{
+		box->setCheckState(Qt::CheckState(state));
+	}
+
 signals:
 	void signalCheckChanged(int state, QString id);
 	void signalFormat(QString path);
@@ -125,6 +130,8 @@ private:
 	//设置影像架次存储路径
 	void setSavePath();
 	void changeSavePath(QString path);
+	//设置全选/取消
+	void setCheckAll(int state);
 
 	Ui::DirectTransfer ui;
 

@@ -61,9 +61,25 @@ void SortieWidget::slotShowPic(QModelIndex index)
 {
 	QModelIndex ind = m_model->index(index.row(), index.column());
 	QString pic = m_model->data(ind, Qt::UserRole).value<QString>();
-	Log::INFO(QStringLiteral("打开影像文件路径：%1").arg(pic));
-	QPixmap img(pic);
-	QPixmap scaledImg = img.scaledToWidth(ui.imageLabel->width());
+	//Log::INFO(QStringLiteral("打开影像文件路径：%1").arg(pic));
+	QPixmap pix;
+	bool ret = pix.load(pic);
+	if (!ret)
+	{
+		Log::INFO(QStringLiteral("使用pixmap打开影像文件失败：%1").arg(pic));
+		QImage img;
+		ret = img.load(pic);
+		if (!ret)
+		{
+			Log::INFO(QStringLiteral("使用image打开影像文件失败：%1").arg(pic));
+		}
+		else
+		{
+			pix = QPixmap::fromImage(img);
+		}
+	}
+	
+	QPixmap scaledImg = pix.scaledToWidth(ui.imageLabel->width());
 
 	ui.imageLabel->clear();
 	ui.imageLabel->setPixmap(scaledImg);

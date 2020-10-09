@@ -25,12 +25,12 @@ void CamSort::init()
 	m_sortLayout->setContentsMargins(0, 0, 0, 0);
 	m_sortLayout->setSpacing(5);
 	ui.sortWidget->setLayout(m_sortLayout);
-	
+	ui.tabWidget->setTabsClosable(true);
+	ui.tabWidget->tabBar()->setTabButton(0, QTabBar::RightSide, nullptr);
 	m_transfer = new Transfer;
 
 	readConfig();
 	refreshSDInfo();
-
 }
 
 void CamSort::connects()
@@ -47,6 +47,7 @@ void CamSort::connects()
 
 	connect(m_transfer, &Transfer::signalProcess, this, &CamSort::refreshProcess, Qt::QueuedConnection);
 	connect(m_transfer, &Transfer::signalSortieTransFinished, this, &CamSort::transFinished, Qt::QueuedConnection);
+	connect(ui.tabWidget, &QTabWidget::tabCloseRequested, this, &CamSort::onclosed);
 }
 
 void CamSort::selectPosFiles()
@@ -247,13 +248,23 @@ void CamSort::showSorties(QMap<int, int> sorties)
 
 	//添加架次
 	m_sortieSelectStatus.clear();
-	m_sortieWidgets.clear();
+	m_sortieIndex.clear();
 	QMapIterator<int, int> iter(sorties);
 	while (iter.hasNext())
 	{
 		iter.next();
+		QMap<QString, int> imageSize;
+		int posSize = iter.value();
+		QMapIterator<QString, UDisk*> iterImage(m_disks);
+		while (iterImage.hasNext())
+		{
+			iterImage.next();
+			int size = iterImage.value()->imageData[iter.key()].size();
+			imageSize.insert(iterImage.key(), size);
+		}
 		m_sortieSelectStatus[iter.key()] = false;
-		CustomSortie *sortie = new CustomSortie(iter.key(), iter.value(), ui.sortWidget);
+		bool ret = Util::compareImageAndPos(imageSize, posSize);
+		CustomSortie *sortie = new CustomSortie(iter.key(), iter.value(), ret, ui.sortWidget);
 		connect(sortie, &CustomSortie::signalCheckChanged, this, &CamSort::sortieSelectChanged);
 		connect(sortie, &CustomSortie::signalSortieDetail, this, &CamSort::showSortieDetail);
 
@@ -263,18 +274,19 @@ void CamSort::showSorties(QMap<int, int> sorties)
 
 void CamSort::showSortieDetail(int sortie)
 {
-	if (m_sortieWidgets.contains(sortie))
+	if (m_sortieIndex.contains(sortie))
 	{
-		ui.tabWidget->setCurrentIndex(sortie+1);
+		ui.tabWidget->setCurrentIndex(m_sortieIndex.value(sortie));
 	}
 	else
 	{
 		SortieWidget *widget = new SortieWidget;
-		m_sortieWidgets.insert(sortie, widget);
 		bool ret = widget->showDetail(&m_disks, m_posData[sortie], sortie);
 		QString str = ret ? QStringLiteral("一致") : QStringLiteral("不一致");
 		ui.tabWidget->addTab(widget, QStringLiteral("架次%1-%2").arg(sortie).arg	(str));
-		ui.tabWidget->setCurrentIndex(sortie + 1);
+		int index = ui.tabWidget->count();
+		m_sortieIndex.insert(sortie, index - 1);
+		ui.tabWidget->setCurrentIndex(index - 1);
 	}
 }
 
@@ -462,17 +474,16 @@ void CamSort::rePosAndSave(QList<int> sorties)
 			QList<PosInfo> pos = m_posData.value(i);
 			for (int k = 0; k < images.size(); k++)
 			{
-				QString insert = QString("%1%2").arg(Util::getParentFloder(images[k].fileName)).arg(i, 2, 10, QLatin1Char('0'));
-				QString fileName = images[k].imageName.insert(2, insert);
+				QString insertStr = QString("%1%2").arg(Util::getParentFloder(images[k].fileName)).arg(i, 2, 10, QLatin1Char('0'));
+				QString fileName = images[k].imageName.insert(2, insertStr);
 
-				out << fileName << "   " << pos[k].date << "   " << pos[k].time
-					<< "   " << pos[k].latitude << "   " << pos[k].longitude
-					<< "   " << pos[k].altitude << endl;
+				out << fileName << " " << pos[k].time
+					<< " " << pos[k].strLat << " " << pos[k].strLong
+					<< " " << pos[k].strAlt << endl;
 			}
 			file.close();
 		}
 	}
-	
 }
 
 QString CamSort::setSaveReposFileName(QString cam, int sortie, QString path)
@@ -533,6 +544,17 @@ void CamSort::decodeConfig(QString str, int &value)
 	if (configs.size() == 3)
 	{
 		value = configs[2].toInt();
+	}
+}
+
+void CamSort::onclosed(int index)
+{
+	if (index != 0)
+	{
+		//ui.tabWidget->removeTab(index);
+		delete ui.tabWidget->widget(index);
+		int key = m_sortieIndex.key(index);
+		m_sortieIndex.remove(key);
 	}
 }
 

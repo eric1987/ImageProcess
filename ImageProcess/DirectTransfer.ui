@@ -27,7 +27,7 @@
       <item>
        <widget class="QCheckBox" name="selectAll">
         <property name="text">
-         <string>全选/反选</string>
+         <string>全选/取消</string>
         </property>
        </widget>
       </item>

@@ -32,12 +32,15 @@ void JouAVDecode(QString str, PosInfo &pd)
 			break;
 		case 2:
 			pd.latitude = var.toFloat();
+			pd.strLat = var;
 			break;
 		case 3:
 			pd.longitude = var.toFloat();
+			pd.strLong = var;
 			break;
 		case 4:
 			pd.altitude = var.toFloat();
+			pd.strAlt = var;
 			break;
 		default:
 			break;
@@ -70,12 +73,15 @@ void DJIDecode(QString str, PosInfo &pd)
 			break;
 		case 3:
 			pd.latitude = var.toFloat();
+			pd.strLat = var;
 			break;
 		case 4:
 			pd.longitude = var.toFloat();
+			pd.strLong = var;
 			break;
 		case 5:
 			pd.altitude = var.toFloat();
+			pd.strAlt = var;
 			break;
 		default:
 			break;

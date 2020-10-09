@@ -8,11 +8,12 @@ class CustomSortie : public QWidget
 {
 	Q_OBJECT
 public:
-	CustomSortie(int sortie, int size, QWidget *parent = Q_NULLPTR)
+	CustomSortie(int sortie, int posSize, bool same, QWidget *parent = Q_NULLPTR)
 		: QWidget(parent)
 	{
 		m_sortie = sortie;
-		box = new QCheckBox(QStringLiteral("架次%1  影像%2张").arg(sortie).arg(size));
+		QString consistent = same ? QStringLiteral("一致") : QStringLiteral("不一致");
+		box = new QCheckBox(QStringLiteral("架次%1,pos数:%2, 影像与pos%3").arg(sortie).arg(posSize).arg(consistent));
 		btn = new QPushButton(QStringLiteral("查看详情"));
 		btn->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 		btn->setBackgroundRole(QPalette::Highlight);

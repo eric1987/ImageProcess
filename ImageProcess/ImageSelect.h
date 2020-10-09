@@ -20,6 +20,7 @@ public:
 	~ImageSelect();
 
 	void sortImages();
+	QStringList getImages();
 
 signals:
 	void signalSortedImages(QMap<int, QList<ImageInfo>> imageData);
@@ -34,6 +35,7 @@ private:
 	void slotClearImages();	//清除影像
 	QStringList getDirImages(QString path);	//获取路径下的影像
 	void addImageToTable(QStringList images);	//将影像转化为model
+	
 
 private:
 	Ui::ImageSelect ui;

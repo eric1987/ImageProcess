@@ -16,6 +16,7 @@ void MainWindow::connects()
 	connect(ui.camSort, &QToolButton::clicked, this, &MainWindow::slotChangeWidget);
 	connect(ui.localSort, &QToolButton::clicked, this, &MainWindow::slotChangeWidget);
 	connect(ui.transFormat, &QToolButton::clicked, this, &MainWindow::slotChangeWidget);
+	connect(ui.block, &QToolButton::clicked, this, &MainWindow::slotChangeWidget);
 
 	connect(ui.page_1, &CamSort::signalSDInfo, ui.page_3, &DirectTransfer::setSDInfo);
 	connect(ui.page_1, &CamSort::signalStatus, this, &MainWindow::slotShowStatus);
@@ -32,10 +33,14 @@ void MainWindow::slotChangeWidget()
 	{
 		ui.stackedWidget->setCurrentIndex(1);
 	}
-	else
+	else if(btn == ui.transFormat)
 	{
 		ui.page_1->refreshSDInfo();
 		ui.stackedWidget->setCurrentIndex(2);
+	}
+	else
+	{
+		ui.stackedWidget->setCurrentIndex(3);
 	}
 }
 

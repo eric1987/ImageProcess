@@ -9,7 +9,7 @@
 #include "Log/Log.h"
 #include "Util.h"
 
-enum TRANSTYPE { SORTIE = 1, DIRECT };	//SORTIE：按架次传输， DIRECT：直接传输
+enum TRANSTYPE { SORTIE = 1, DIRECT, LOCAL };	//SORTIE：按架次传输， DIRECT：直接传输
 
 class Transfer : public QThread
 {
@@ -31,6 +31,12 @@ public:
 	//设置要传输的sd卡
 	void setSDCards(QStringList idList, QMap<QString, SDInfo> &sdInfo);
 	
+	//设置要传输的影像
+	void setTransImages(QMap<QString, QMap<int, QList<ImageInfo>>> images);
+
+	//设置本地要传输的架次
+	void setLocalTransSortie(QList<int> num);
+
 	//停止传输
 	void stopTransfer();
 
@@ -53,6 +59,9 @@ private:
 	//获取架次影像总数
 	int getSortieTotalSize();
 
+	//获取本地架次影像总数
+	int getLocalTotalSize();
+
 	//创建存储路径 sortie:架次序号，nickname:sd卡昵称
 	QString createDir(int sortie, QString nickname);
 
@@ -64,6 +73,9 @@ private:
 
 	//直接传输方法
 	void directTransfer();
+
+	//本地传输方法
+	void localTransfer();
 
 	//直接传输单个文件方法
 	bool directTransferSingleFile(QString path, QString srcFile, QString dstPath);
@@ -94,4 +106,5 @@ private:
 	int m_directStep = 1;
 
 	bool m_stop = false;
+	QMap<QString, QMap<int, QList<ImageInfo>>> m_logcalImages;
 };
