@@ -84,8 +84,8 @@ QList<QStandardItem*> TableModel::initOneRow(QMap<QString, ImageInfo> images, Po
 		{
 			if (QStringLiteral("相机%1").arg(it.key()) == headStr)
 			{
-				item->setData(it->imageName, Qt::DisplayRole);	//显示照片名称
-				item->setData(it->fileName, Qt::UserRole);		//照片路径名
+				item->setData(QVariant(it->imageName), Qt::DisplayRole);	//显示照片名称
+				item->setData(QVariant::fromValue(it->fileName), Qt::UserRole+1);		//照片路径名
 			}
 		}
 

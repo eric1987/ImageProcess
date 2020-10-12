@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QStandardItemModel>
+#include <QTableWidgetItem>
 
 #include "Common.h"
 

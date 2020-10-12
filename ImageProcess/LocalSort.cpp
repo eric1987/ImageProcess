@@ -495,6 +495,7 @@ void LocalSort::rePosAndSave(QList<int> sorties)
 					<< " " << pos[k].strAlt << endl;
 			}
 			file.close();
+			Log::INFO(QStringLiteral("生成repos文件:%1。").arg(posFile));
 		}
 	}
 }

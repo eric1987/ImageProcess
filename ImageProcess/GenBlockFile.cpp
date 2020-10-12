@@ -319,7 +319,7 @@ void GenBlockFile::changeBlocksIntoExcelData()
 				QList<QVariant> rowData;
 				rowData.append(block.imageName);
 				rowData.append(block.groupName);
-				rowData.append(block.groupName);
+				rowData.append(block.nickName);
 				rowData.append(block.latitude);
 				rowData.append(block.longitude);
 				rowData.append(block.height);

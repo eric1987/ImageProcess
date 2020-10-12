@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QTableView>
+#include <QImageReader>
 
 #include "ui_SortieWidget.h"
 #include "TableModel.h"

@@ -51,6 +51,7 @@ struct Block
 {
 	QString imageName;
 	QString groupName;
+	QString nickName;
 	QString latitude;
 	QString longitude;
 	QString height;

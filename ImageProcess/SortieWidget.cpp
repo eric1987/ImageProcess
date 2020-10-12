@@ -56,28 +56,35 @@ bool SortieWidget::comparisonImageAndPos(QMap<QString, QList<ImageInfo>> images,
 	}
 	return true;
 }
-
+#include <QTextCodec>
 void SortieWidget::slotShowPic(QModelIndex index)
 {
-	QModelIndex ind = m_model->index(index.row(), index.column());
-	QString pic = m_model->data(ind, Qt::UserRole).value<QString>();
-	//Log::INFO(QStringLiteral("打开影像文件路径：%1").arg(pic));
+	//QModelIndex ind = m_model->index(index.row(), index.column());
+	//QVariant pic = m_model->data(ind, Qt::UserRole+1).value<QVariant>();
+
+	//QStandardItem *item = m_model->item(index.row(), index.column());
+	QString strPic = index.data(Qt::UserRole+1).toString();
 	QPixmap pix;
-	bool ret = pix.load(pic);
+	QImageReader r(strPic);
+	r.setDecideFormatFromContent(true);
+	QImage i = r.read();
+	if (!i.isNull())
+		pix = QPixmap::fromImage(i);
+	/*bool ret = pix.load(strPic);
 	if (!ret)
 	{
-		Log::INFO(QStringLiteral("使用pixmap打开影像文件失败：%1").arg(pic));
+		Log::INFO(QStringLiteral("使用pixmap打开影像文件失败：%1").arg(strPic));
 		QImage img;
-		ret = img.load(pic);
+		ret = img.load(strPic);
 		if (!ret)
 		{
-			Log::INFO(QStringLiteral("使用image打开影像文件失败：%1").arg(pic));
+			Log::INFO(QStringLiteral("使用image打开影像文件失败：%1").arg(strPic));
 		}
 		else
 		{
 			pix = QPixmap::fromImage(img);
 		}
-	}
+	}*/
 	
 	QPixmap scaledImg = pix.scaledToWidth(ui.imageLabel->width());
 

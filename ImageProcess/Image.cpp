@@ -181,6 +181,7 @@ void Image::getImageInfo()
 		ImageInfo info;
 		QByteArray cdata = file.toLocal8Bit();
 		int ret = readSingleInfo(std::string(cdata), info);
+		info.fileName = file;
 		if (ret < 0)
 		{
 			Log::INFO(QStringLiteral("读取图片信息错误."));
