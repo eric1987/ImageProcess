@@ -125,9 +125,9 @@ private:
 	QString m_savePath;				//存储路径
 	QStringList m_posFiles;			//pos文件
 	QList<int> m_transferSortie;	//要传输的架次
-	int m_camNum = 0;				//
+	int m_camNum = 0;				//影像编号
 	QMap<int, bool> m_sortieSelectStatus;	//架次选择状态
-	PosSorting *m_posSort = nullptr;
+	PosSorting *m_posSort = nullptr;	//pos架次分类对象
 	QMap<int, int> m_sortieIndex;	//架次结果界面
-	Transfer *m_transfer = nullptr;
+	Transfer *m_transfer = nullptr;		//传输对象
 };

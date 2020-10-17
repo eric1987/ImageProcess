@@ -64,6 +64,7 @@ void SortieWidget::slotShowPic(QModelIndex index)
 
 	//QStandardItem *item = m_model->item(index.row(), index.column());
 	QString strPic = index.data(Qt::UserRole+1).toString();
+	Log::INFO(QStringLiteral("打开图片的地址是：%1").arg(strPic));
 	QPixmap pix;
 	QImageReader r(strPic);
 	r.setDecideFormatFromContent(true);

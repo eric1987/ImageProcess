@@ -1,4 +1,3 @@
-//TODO: slotAddImage, slotAddFolders, slotClearImages
 #pragma once
 
 #include <QWidget>
@@ -18,17 +17,20 @@ class ImageSelect : public QWidget
 public:
 	ImageSelect(QWidget *parent = Q_NULLPTR);
 	~ImageSelect();
-
+	//影像分类
 	void sortImages();
+	//获取影像
 	QStringList getImages();
 
 signals:
+	//发送分类好的影像
 	void signalSortedImages(QMap<int, QList<ImageInfo>> imageData);
+	//影像添加信号
 	void signalImageEdit(bool b);
 
 private:
-	void init();
-	void connects();
+	void init();		//初始化
+	void connects();	//信号绑定
 
 	void slotAddImages();	//添加影像
 	void slotAddFolders();	//添加影像文件夹
@@ -39,10 +41,10 @@ private:
 
 private:
 	Ui::ImageSelect ui;
-	QStringList m_images;
-	QStringList m_headList;
-	int m_row = 0;
-	const int m_columnName = 0;
-	const int m_columnPath = 1;
-	QMap<int, QList<ImageInfo>> m_imageData;
+	QStringList m_images;		//影像名称
+	QStringList m_headList;		//表头名称
+	int m_row = 0;				//行数
+	const int m_columnName = 0;	//第0列：显示名称
+	const int m_columnPath = 1;	//第1列：显示路径
+	QMap<int, QList<ImageInfo>> m_imageData;	//不再使用
 };

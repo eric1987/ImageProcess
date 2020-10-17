@@ -17,9 +17,9 @@ struct PosInfo
 	float latitude = 0.0;		///<纬度
 	float longitude = 0.0;		///<经度
 	float altitude = 0.0;		///<高度
-	QString strLat = "";
-	QString strLong = "";
-	QString strAlt = "";
+	QString strLat = "";		///<纬度
+	QString strLong = "";		///<经度
+	QString strAlt = "";		///<高度
 	float pitching = 0.0;		///<俯仰
 	float rolling = 0.0;		///<滚转
 	float driftAngle = 0.0;		///<航偏角
@@ -27,19 +27,19 @@ struct PosInfo
 	float groundSpeed = 0.0;	///<地速
 	int type = -1;				///<数据类型，-1：初始值，0：舍弃，1：留用
 
-	QString date;
-	QString id;
+	QString date;				///<日期
+	QString id;					///<id
 };
 
 struct ImageInfo
 {
-	int timestamp = 0;
-	QDateTime time;
-	QString stime;
-	QString aperture;
-	QString shutterspeed;
-	QString iso;
-	int size;
+	int timestamp = 0;			///<时间戳
+	QDateTime time;				///<时间
+	QString stime;				///<时间
+	QString aperture;			///<光圈
+	QString shutterspeed;		///<快门速度
+	QString iso;				///<iso
+	int size;					///<大小
 	QString imageName;			///<用于影像存储时的名称
 	QString fileName;			///<用于影像转存使用：影像绝对路径
 	int type = -1;				///<数据类型，-1：初始值，0：舍弃，1：留用
@@ -49,20 +49,20 @@ struct ImageInfo
 
 struct Block
 {
-	QString imageName;
-	QString groupName;
-	QString nickName;
-	QString latitude;
-	QString longitude;
-	QString height;
+	QString imageName;			///<影像名称
+	QString groupName;			///<group名
+	QString nickName;			///<相机名称
+	QString latitude;			///<纬度
+	QString longitude;			///<经度
+	QString height;				///<高度
 };
 
 struct ImageSD
 {
-	int imageSize;
-	float total;
-	float available;
-	QString path;
+	int imageSize;			///<影像大小
+	float total;			///<总大小
+	float available;		///<可用大小
+	QString path;			///<路径
 };
 
 struct SortInfo

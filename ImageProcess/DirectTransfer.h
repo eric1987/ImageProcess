@@ -12,6 +12,7 @@
 #include "Common.h"
 #include "Transfer.h"
 
+//影像sd卡的信息展示
 class CustomSD : public QWidget
 {
 	Q_OBJECT
@@ -46,21 +47,25 @@ public:
 		connect(btn, &QPushButton::clicked, this, &CustomSD::format);
 	}
 	~CustomSD() {}
-
+	//设置选中状态
 	void setState(int state)
 	{
 		box->setCheckState(Qt::CheckState(state));
 	}
 
 signals:
+	//选中状态变化信息
 	void signalCheckChanged(int state, QString id);
+	//格式化信号
 	void signalFormat(QString path);
 
 private:
+	//选中状态变化响应函数
 	void checkChanged(int state)
 	{
 		emit signalCheckChanged(state, m_info.deviceID);
 	}
+	//格式化响应函数
 	void format()
 	{
 		emit signalFormat(m_info.path);
@@ -84,7 +89,9 @@ public:
 	void setSDInfo(QMap<QString, SDInfo> sdInfo);
 
 signals:
+	//发送格式化完成信号
 	void signalFormatFinish();
+	//发送刷新SD卡信息信号
 	void signalRefreshSDInfo();
 
 private:
@@ -121,10 +128,10 @@ private:
 	//传输文件成功
 	void transferFinished();
 	
-	//
+	//禁用操作
 	void unableOperation();
 
-	//
+	//启用操作
 	void enableOperation();
 
 	//设置影像架次存储路径
@@ -135,11 +142,9 @@ private:
 
 	Ui::DirectTransfer ui;
 
-	QMap<QString, SDInfo> m_sdInfo;
-	QVBoxLayout *m_directLayout = nullptr;
-
-	QMap<QString, bool> m_sdCheck;
-	QString m_savePath;
-
-	Transfer *m_transfer = nullptr;
+	QMap<QString, SDInfo> m_sdInfo;			//sd卡信息
+	QVBoxLayout *m_directLayout = nullptr;	//布局
+	QMap<QString, bool> m_sdCheck;			//sd卡选中状态
+	QString m_savePath;						//保存路径
+	Transfer *m_transfer = nullptr;			//传输对象
 };

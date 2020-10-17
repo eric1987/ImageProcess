@@ -290,11 +290,6 @@ void GenBlockFile::getBasePath()
 	}
 }
 
-void GenBlockFile::createBlockByRepos()
-{
-
-}
-
 void GenBlockFile::changeBlocksIntoExcelData()
 {
 	int column = 6;	//由ImageInfo的数据种类决定

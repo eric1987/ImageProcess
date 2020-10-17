@@ -97,14 +97,15 @@ private:
 	QMap<QString, UDisk*> *m_disks = nullptr;		//sd卡信息，保存有分架次的影像信息
 	int m_transferCount = 0;		//已传输数量
 	int m_transferSize = 0;			//传输记录
-	int m_sortieTotal = 0;
-	int m_sortieStep = 1;
+	int m_sortieTotal = 0;		//架次传输的影像总数
+	int m_sortieStep = 1;		//架次传输进度更新单步大小
 
-	int m_directTransCount = 0;
-	int m_directTransSize = 0;
-	int m_directTotal = 0;
-	int m_directStep = 1;
+	//直接传输变量
+	int m_directTransCount = 0;		//直接传输已传输数量
+	int m_directTransSize = 0;		//直接传输传输记录
+	int m_directTotal = 0;			//直接传输要传输的影像总数
+	int m_directStep = 1;			//直接传输进度更新的单步大小
 
-	bool m_stop = false;
-	QMap<QString, QMap<int, QList<ImageInfo>>> m_logcalImages;
+	bool m_stop = false;		//停止符
+	QMap<QString, QMap<int, QList<ImageInfo>>> m_logcalImages; //本地影像数据
 };

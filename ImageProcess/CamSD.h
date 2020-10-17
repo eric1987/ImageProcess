@@ -23,10 +23,10 @@ public:
 private:
 	Ui::CamSD ui;
 
-	const QString m_baseName = QStringLiteral("影像SD-");
-	QString m_name;
-	QString m_path;
-	float m_collective = 0.0;
-	float m_available = 0.0;
-	bool m_online = true;
+	const QString m_baseName = QStringLiteral("影像SD-");	//基础名称
+	QString m_name;		//影像sd卡名
+	QString m_path;		//影像路径名
+	float m_collective = 0.0;	//共有空间
+	float m_available = 0.0;	//可用空间
+	bool m_online = true;		//是否在线
 };

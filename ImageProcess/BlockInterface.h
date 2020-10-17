@@ -13,29 +13,26 @@ public:
 	~BlockInterface();
 
 private:
-	void init();
-	void selectPos();
-	void posTypeChanged(int index);
-	void blockPathChanged();
-	void blockPathSelected();
-	void basePathChanged();
-	void basePathSelected();
-	void clearPos();
-	void genBlockFile();
-	void readPosFile();
-	void readSignalFile(QString file);
-	void decodeFileName(QString file, int &groupName, int &sort, QString &nickname);
-	void slotGenBlockFinished(bool b);
-	void onTemplateFile();
-	void onTemplateChanged(QString text);
+	void init();	//初始化
+	void selectPos();	//选择重新生成的pos文件
+	void blockPathChanged();	//block生成路径变化
+	void blockPathSelected();	//block生成路径选择
+	void basePathChanged();		//base路径变化
+	void basePathSelected();	//base路径选择
+	void clearPos();			//清空pos
+	void genBlockFile();		//生成block文件
+	void readPosFile();			//读取pos文件
+	void readSignalFile(QString file);		//读取单个文件
+	void decodeFileName(QString file, int &groupName, int &sort, QString &nickname);	//解析文件名
+	void slotGenBlockFinished(bool b);	//block文件生成完毕
+	void onTemplateFile();		//打开模板文件
+	void onTemplateChanged(QString text);	//模板文件变化
 
 private:
 	Ui::BlockInterface ui;
-	QStringList m_posFiles;
-	int m_posType;
-	QString m_blockPath;
-	QString m_basePath;
-	QMap<int, QStringList> m_images;
-	QMap<int, QMap<int, QList<Block>>> m_blocks;
-	QString m_templateFile;
+	QStringList m_posFiles;		//pos文件
+	QString m_blockPath;		//block生成路径
+	QString m_basePath;			//base路径
+	QMap<int, QMap<int, QList<Block>>> m_blocks;	//要生成block用到的数据
+	QString m_templateFile;		//模板文件
 };

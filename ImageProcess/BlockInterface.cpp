@@ -38,11 +38,6 @@ void BlockInterface::selectPos()
 	ui.posWidget->addItems(m_posFiles);
 }
 
-void BlockInterface::posTypeChanged(int index)
-{
-	m_posType = index;
-}
-
 void BlockInterface::blockPathChanged()
 {
 	m_blockPath = ui.lineEdit->text();
