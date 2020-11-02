@@ -30,7 +30,7 @@ public:
 		connect(btn, &QPushButton::clicked, this, &CustomSortie::showSortie);
 	}
 	~CustomSortie() {}
-	//设置选中状态
+	//设置选中状态，state：选中状态
 	void setState(int state)
 	{
 		box->setCheckState(Qt::CheckState(state));

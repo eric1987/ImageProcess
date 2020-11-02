@@ -14,6 +14,7 @@ public:
 	~TableModel();
 
 	//初始化model
+	//images:影像数据 key：相机名称：asdw，value，单架次影像数据， pos：单架次pos数据
 	void initModel(QMap<QString, QList<ImageInfo>> images, QList<PosInfo> pos);
 
 private:

@@ -51,28 +51,30 @@ private:
 	//选择pos文件
 	void selectPosFiles();
 
-	//改变pos类型
+	//改变pos类型，index:0大疆，1纵横
 	void changePosType(int index);
 
-	//获取单个sd信息
+	//获取单个sd信息，path：路径
 	void getSDInfo(QString path);
 
-	//获取sd卡的昵称与影像数量
+	//获取sd卡的昵称与影像数量，sd：sd卡信息，path：sd卡路径
 	void getSDNicknameAndImageSize(SDInfo &sd, QString path);
 
 	//影像文件架次分类
 	void getSorties();
 
 	//收到pos分架次信息，并准备显示架次概述
+	//posData:pos数据，key为架次，value为架次数据
 	void prepareShowSorties(QMap<int, QList<PosInfo>> posData);
 
 	//显示架次概述: sorties, key:架次，value：影像数量
 	void showSorties(QMap<int, int> sorties);
 
-	//显示架次详情
+	//显示架次详情：sortie：架次
 	void showSortieDetail(int sortie);
 
 	//架次选择变化
+	//state：选中状态，sortie：架次
 	void sortieSelectChanged(int state, int sortie);
 
 	//架次传输
@@ -92,27 +94,33 @@ private:
 	void getImageExif();
  
 	//刷新架次传输进度
+	//value：进度值0~100
 	void refreshProcess(int value);
 
 	//架次传输完成
 	void transFinished();
 
 	//修改pos并保存
+	//sortie：要重新生成pos的架次，list中为具体的架次编号
 	void rePosAndSave(QList<int> sorties);
 
 	//命名转存pos文件名称
+	//cam，相机名称：ASDW，sortie：架次， path：路径
 	QString setSaveReposFileName(QString cam, int sortie, QString path);
 
 	//全选或全部选架次
+	//state：选中状态
 	void setCheckSorties(int state);
 	
 	//读取config文件
 	void readConfig();
 
 	//解析配置文件
+	//str：解析语句，value：解析值
 	void decodeConfig(QString str, int &value);
 
 	//关闭tab窗口
+	//index：关闭窗口序号
 	void onclosed(int index);
 private:
 	Ui::CamSort ui;

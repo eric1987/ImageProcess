@@ -129,15 +129,20 @@ void PosSorting::setDisks(QMap<QString, UDisk*> *disks)
 
 void PosSorting::getPosSorted()
 {
+	//读取pos数据
 	getPosData();
+	//对pos数据进行架次分类
 	sortingPosData();
+	//判断图像是否准备好
 	isImageReady();
 	emit signalPosData(m_posInfoSorted);
 }
 
 void PosSorting::getLocPosSorted()
 {
+	//读取pos数据
 	getPosData();
+	//对pos数据进行架次分类
 	sortingPosData();
 	emit signalPosData(m_posInfoSorted);
 }

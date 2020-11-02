@@ -12,12 +12,13 @@ public:
 	~CamSD();
 
 	//设置sd卡名字
+	//name：名称，path：路径
 	void setName(QString name, QString path);
 	
 	//设置容量，param:available，可用容量；collective，总容量
 	void setAvailableAndCollective(float available, float collective);
 
-	//设置sd卡的在线状态
+	//设置sd卡的在线状态， online：true在线，false不在线
 	void setOnlineStatus(bool online);
 
 private:

@@ -48,6 +48,7 @@ bool lessThan(const QString &s1, const QString &s2)
 
 void Image::readInfo()
 {
+	//获取sd卡下文件夹
 	QDir dir(m_disk->path);
 	QStringList dirList = dir.entryList(QDir::NoDotAndDotDot | QDir::Dirs);
 
@@ -55,19 +56,24 @@ void Image::readInfo()
 
 	for each (QString subDir in dirList)
 	{
+		//包含MSDCF，则为有效路径
 		if (subDir.contains("MSDCF"))
 		{
+			//获取MSDCF下文件夹
 			QString dirPath = dir.absolutePath();
 			QDir dirMSDCF(dirPath + "/" + subDir);
 
+			//获取子文件夹下文件
 			QStringList fileList = dirMSDCF.entryList(QDir::Files);
 			QString subPath = dirMSDCF.absolutePath();
+			//判断该路径是否已经读取过exif信息，已读取，则跳过
 			if (m_disk->exifStatus.value(subPath) == true)
 			{
 				continue;
 			}
 
 			qSort(fileList.begin(), fileList.end(), lessThan);
+			//获取单个文件的exif信息并排列架次
 			for each (QString var in fileList)
 			{
 				ImageInfo info;
@@ -81,10 +87,12 @@ void Image::readInfo()
 				sortie(info);
 			}
 
+			//对已经获取的exif信息子文件夹进行标记
 			m_disk->exifStatus[subPath] = true;
 		}
 	}
 
+	//将最后一个架次添加到架次数据m_disk->imageData中
 	if (m_sortieImageSize < m_minFightImages)
 	{
 		for each (ImageInfo var in m_fightData)
@@ -100,6 +108,7 @@ void Image::readInfo()
 	m_sortieImageSize = 0;
 	m_sortie = 0;
 
+	//对m_disk已读取完exif信息进行标记
 	m_disk->sortieStatus = true;
 }
 
@@ -176,6 +185,7 @@ void Image::sortie(ImageInfo info)
 
 void Image::getImageInfo()
 {
+	//获取单个影像的exif信息
 	Q_FOREACH(QString file, m_images)
 	{
 		ImageInfo info;

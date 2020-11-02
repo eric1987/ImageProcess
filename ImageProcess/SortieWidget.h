@@ -32,6 +32,7 @@ public:
 
 private:
 	//判断架次影像与pos数量是否一致
+	//images:影像数据 key：相机名称：asdw，value，单架次影像数据， pos：单架次pos数据
 	bool comparisonImageAndPos(QMap<QString, QList<ImageInfo>> images, QList<PosInfo> pos);
 
 	//显示点击的图片

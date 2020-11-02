@@ -26,7 +26,7 @@ public:
 	//设置要读取的u盘信息
 	void setUDiskInfo(UDisk *udisk);
 	
-	//读取路径下的图片信息
+	//读取SD卡下的图片信息
 	void readInfo();
 
 	//读取本地路径下的图片信息

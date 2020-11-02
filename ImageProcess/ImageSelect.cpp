@@ -14,11 +14,14 @@ ImageSelect::~ImageSelect()
 
 void ImageSelect::sortImages()
 {
+	//清空影像分类数据
 	m_imageData.clear();
 	
+	//建立影像类，建立线程
 	Image *image = new Image;
 	QThread *thread = new QThread;
 	image->moveToThread(thread);
+	//设置要分类的影像文件
 	image->setImages(m_images);
 
 	connect(image, &Image::signalInfos, this, &ImageSelect::signalSortedImages, Qt::QueuedConnection);

@@ -23,10 +23,25 @@ private:
 	void genBlockFile();		//生成block文件
 	void readPosFile();			//读取pos文件
 	void readSignalFile(QString file);		//读取单个文件
-	void decodeFileName(QString file, int &groupName, int &sort, QString &nickname);	//解析文件名
-	void slotGenBlockFinished(bool b);	//block文件生成完毕
+	/**
+	* @brief 解析文件名
+	* @file: 文件名称 
+	* @groupName, excel中对应文件的groupName
+	* @sort：架次信息
+	* @nickname：相机名称：eg：A，S，D，W
+	*/
+	void decodeFileName(QString file, int &groupName, int &sort, QString &nickname);
+	/**
+	* @brief block文件生成完毕
+	* @b: 生成成功与否
+	*/
+	void slotGenBlockFinished(bool b);	
 	void onTemplateFile();		//打开模板文件
-	void onTemplateChanged(QString text);	//模板文件变化
+	/**
+	* @brief 模板文件变化
+	* @ text：模板文件名称
+	*/
+	void onTemplateChanged(QString text);	
 
 private:
 	Ui::BlockInterface ui;

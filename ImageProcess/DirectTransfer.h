@@ -86,6 +86,7 @@ public:
 	~DirectTransfer();
 
 	//设置sd卡信息
+	//key：sd卡名称：asdw， value：sd卡信息
 	void setSDInfo(QMap<QString, SDInfo> sdInfo);
 
 signals:
@@ -99,6 +100,7 @@ private:
 	void init();
 
 	//直接传输checkbox选择
+	//state：选中状态，id：选择的boxID：asdw
 	void directSelectChanged(int state, QString id);
 	
 	//将选择的sd卡格式化

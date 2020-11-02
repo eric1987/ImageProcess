@@ -17,7 +17,7 @@ class ImageSelect : public QWidget
 public:
 	ImageSelect(QWidget *parent = Q_NULLPTR);
 	~ImageSelect();
-	//影像分类
+	//开始影像分类
 	void sortImages();
 	//获取影像
 	QStringList getImages();
@@ -46,5 +46,5 @@ private:
 	int m_row = 0;				//行数
 	const int m_columnName = 0;	//第0列：显示名称
 	const int m_columnPath = 1;	//第1列：显示路径
-	QMap<int, QList<ImageInfo>> m_imageData;	//不再使用
+	QMap<int, QList<ImageInfo>> m_imageData;	//影像分类数据
 };

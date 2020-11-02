@@ -16,21 +16,24 @@ public:
 	~PosSorting();
 
 	//设置pos文件类型
+	//type：0大疆，1纵横
 	void setPosType(int type);
 
 	//设置要读取的pos文件
+	//files文件名
 	void setPosFiles(QStringList files);
 
 	//设置m_disks
 	void setDisks(QMap<QString, UDisk*> *disks);
 
-	//将pos数据架次化
+	//将pos数据架次分类
 	void getPosSorted();
 
-	//本地pos数据架次化
+	//本地pos数据架次分类
 	void getLocPosSorted();
 
 	//设置配置
+	//gap：影像时间间隔，alt：高度差， minImages:架次最少影像数
 	static void setConfig(int gap, int alt, int minImages);
 
 signals:
@@ -44,6 +47,7 @@ private:
 	void sortingPosData();
 
 	//读取pos数据
+	//file：pos文件名， info：存储pos信息
 	void readPos(QString file, QList<PosInfo> &info);
 
 	//解析pos数据函数

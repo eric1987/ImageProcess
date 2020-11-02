@@ -29,15 +29,23 @@ private:
 	void init();				//初始化
 	void connects();			//连接
 	void slotOpenPos();			//选择pos文件
-	void slotChangePosType(int index);	//设置pos类型
+	void slotChangePosType(int index);	//设置pos类型，index:0大疆，1纵横
 	void slotStartSort();		//开始排序
-	void receivePosData(QMap<int, QList<PosInfo>> posData);	//接收排序好的pos数据
+	//接收排序好的pos数据
+	//posData：pos数据,key:架次，value：对应架次数据
+	void receivePosData(QMap<int, QList<PosInfo>> posData);	
 	bool isDataPrepared();		//数据是否准备好
-	void receiveImageData(QMap<int, QList<ImageInfo>> imageData);	//接收分类影像数据
+	//接收分类影像数据
+	//imageData：影像数据,key:架次，value：对应架次数据
+	void receiveImageData(QMap<int, QList<ImageInfo>> imageData);	
 	void sortiesDisplay();		//展示架次信息
-	void sortieSelectChanged(int state, int sortie);	//影像架次选择变化
+	//影像架次选择变化
+	//state:选中状态， sortie：架次序号
+	void sortieSelectChanged(int state, int sortie);	
 	void showSortieDetail(int sortie);		//显示架次详细信息
-	void imageAdd(bool state);		//增加添加了影像的相机
+	//增加添加了影像的相机
+	//state，该相机是否添加了影像
+	void imageAdd(bool state);		
 	void addCamTab(int index);		//添加影像架次显示
 	QMap<QString, QList<ImageInfo>> getSortieImage(int sortie);	//获取架次分类的影像
 	QMap<int, QMap<int, QList<ImageInfo>>> needToGenBlockSorts();	//需要生成block的影像文件：不再使用
@@ -49,12 +57,22 @@ private:
 	void unableOperation();	//禁用操作
 	void enableOperation();	//启用操作
 	void rePosAndSave(QList<int> sorties);	//修改pos并保存
-	QString getImageName(QMap<int, QList<ImageInfo>> &images);	//获取影像名称：ASDWX
-	QString setSaveReposFileName(QString cam, int sortie, QString path);//命名转存pos文件名称
-	void refreshProcess(int process);	//刷新传输进度
+	//获取影像名称：ASDWX
+	//images：影像数据，key：架次，value：架次数据
+	QString getImageName(QMap<int, QList<ImageInfo>> &images);	
+	//命名转存pos文件名称
+	//cam：相机名称，sortie：架次序号，path：路径
+	QString setSaveReposFileName(QString cam, int sortie, QString path);
+	//刷新传输进度
+	//process：进度值
+	void refreshProcess(int process);	
 	void transFinished();	//传输完成
-	void onclosed(int index);	//关闭架次
-	void setCheckSorties(int state);	//设置架次选中状态
+	//关闭架次
+	//index：关闭的序号
+	void onclosed(int index);	
+	//设置架次选中状态
+	//state：选中状态
+	void setCheckSorties(int state);	
 private:
 	Ui::LocalSort ui;
 	QStringList m_posFiles;		//pos文件
